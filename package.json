@@ -1,0 +1,30 @@
+{
+  "name": "colorful-hash",
+  "version": "0.0.1",
+  "description": "A sample Node.js app using Express 4",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "uglify-js": "^3.3.9"
+  },
+  "engines": {
+    "node": "8.9.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/solosodium/colorful-hash"
+  },
+  "keywords": [
+    "html",
+    "javascript",
+    "hash"
+  ],
+  "author": "Hao Fu",
+  "contributors": [
+    "Hao Fu <fuhaoee@gmail.com>"
+  ],
+  "license": "MIT"
+}

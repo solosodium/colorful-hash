@@ -1,0 +1,2 @@
+/* colorful.hash.js */
+var coha;(coha=coha||{}).hash={parse:function(o,n){if("string"==typeof o||o instanceof String||coha.message.error("Hash "+o+" is not a string."),!n)return!0}},(coha=coha||{}).message={PREFIX:"[colorful.hash]: ",log:function(o){console.log(this.PREFIX+o)},warn:function(o){console.warn(this.PREFIX+o)},error:function(o){console.error(this.PREFIX+o)}};

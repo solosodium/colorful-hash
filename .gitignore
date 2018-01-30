@@ -1,0 +1,8 @@
+# Ignore project files
+.idea/*
+
+# Ignore node modules
+node_modules/*
+
+# Get MAC out of the way
+.DS_Store
