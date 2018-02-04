@@ -11,10 +11,23 @@
 <h1>Colorful Hash Demo</h1>
 
 <script type="application/javascript">
-    var valid1 = coha.hash.parse(12313);
-    var valid2 = coha.hash.parse("asdsd", "");
-    console.log(valid1);
-    console.log(valid2);
+    // test uuid
+    var uuid = "c06006f8-bc64-4ed7-b273-da2bd1f7dec7";
+    var hash1 = coha.uuid.toHash(uuid);
+    console.log(hash1);
+    // test hash
+    var valid1 = coha.hash.isValid(hash1, coha.ENCODING.HEX);
+    var numbers1 = coha.hash.toNumbers(hash1, coha.ENCODING.HEX);
+    console.log(numbers1);
+    // test colors
+    var color1 = new coha.color.Color(0, 0, 0);
+    var color2 = new coha.color.Color(128, 128, 128);
+    var range1 = new coha.color.Range(0, 7);
+    var range2 = new coha.color.Range(8, 15);
+    var mapping1 = new coha.color.Mapping(range1, color1);
+    var mapping2 = new coha.color.Mapping(range2, color2);
+    var colors = coha.color.create(new Range(coha.RANGE.HEX.MIN, coha.RANGE.HEX.MAX), [mapping1, mapping2]);
+    console.log(colors);
 </script>
 </body>
 </html>

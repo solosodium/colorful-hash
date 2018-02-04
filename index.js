@@ -17,7 +17,7 @@ const FILE_ENCODING = 'utf8';
 var options = {
     toplevel: false,
     output: {
-        beautify: false,
+        beautify: true,
         preamble: '/* '+ OUTPUT_FILE +' */'
     }
 };
