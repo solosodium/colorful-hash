@@ -1,76 +1,88 @@
-var coha = coha || {};
-
 (function() {
 
-    coha.hash = {
-
-        /**
-         * Check if a hash string is valid.
-         * @param hash
-         * @param encoding
-         * @return {boolean}
-         */
-        isValid: function(hash, encoding) {
-            // Expect hash to be a string.
-            if (!(typeof hash === 'string') && !(hash instanceof String)) {
-                coha.msg.error("Hash '" + hash + "' is not a string.");
-                return false;
-            }
-            // Check encoding case.
-            switch (encoding) {
-                case coha.ENCODING.HEX:
-                    // HEX hash has to be converted to lower case first.
-                    hash = hash.toLowerCase();
-                    for (var i = 0; i < hash.length; i++) {
-                        if (coha.CHARSET.HEX.indexOf(hash.charAt(i)) < 0) {
-                            coha.msg.error("'" + hash + "' is invalid HEX hash.");
-                            return false;
-                        }
-                    }
-                    break;
-                case coha.ENCODING.BASE64:
-                    for (var j = 0; j < hash.length; j++) {
-                        if (coha.CHARSET.BASE64.indexOf(hash.charAt(j)) < 0) {
-                            coha.msg.error("'" + hash + "' is invalid BASE64 hash.");
-                            return false;
-                        }
-                    }
-                    break;
-                default:
-                    coha.msg.error("Unknown encoding '" + encoding + "'.");
-                    return false;
-                    break;
-            }
-            return true;
-        },
-
-        /**
-         * Convert hash string to an array of numbers.
-         * @param hash
-         * @param encoding
-         * @return {Array}
-         */
-        toNumbers: function(hash, encoding) {
-            var numbers = [];
-            switch (encoding) {
-                case coha.ENCODING.HEX:
-                    for (var i = 0; i < hash.length; i++) {
-                        numbers.push(coha.CHARSET.HEX.indexOf(hash.charAt(i)));
-                    }
-                    break;
-                case coha.ENCODING.BASE64:
-                    for (var i = 0; i < hash.length; i++) {
-                        numbers.push(coha.CHARSET.BASE64.indexOf(hash.charAt(i)));
-                    }
-                    break;
-                default:
-                    coha.msg.error("Unknown encoding '" + encoding + "'.");
-                    return [];
-                    break;
-            }
-            return numbers;
+    /**
+     * Hash class.
+     * @param hash
+     * @param encoding  hash encoding (hex or base64)
+     * @constructor
+     */
+    ColorfulHash.Hash = function(hash, encoding) {
+        this.hash = '';
+        this.processed = '';
+        this.encoding = '';
+        // Expect hash to be a string.
+        if (!ColorfulHash.Util.isString(hash)) {
+            ColorfulHash.Msg.error("Hash '" + hash + "' is not a string.");
+            return;
         }
-
+        // Remove all white spaces.
+        this.processed = hash.replace(new RegExp(' ', 'g'), '');
+        // Check encoding case.
+        switch (encoding) {
+            case ColorfulHash.ENCODING.HEX:
+                // HEX hash has to be converted to lower case first.
+                this.processed = this.processed.toLowerCase();
+                for (var i = 0; i < this.processed.length; i++) {
+                    if (ColorfulHash.CHARSET.HEX.indexOf(this.processed.charAt(i)) < 0) {
+                        ColorfulHash.Msg.error("'" + hash + "' is invalid HEX hash.");
+                        return;
+                    }
+                }
+                break;
+            case ColorfulHash.ENCODING.BASE64:
+                // Remove end-of-string padding '='.
+                this.processed = this.processed.replace(new RegExp('=', 'g'), '');
+                for (var j = 0; j < this.processed.length; j++) {
+                    if (ColorfulHash.CHARSET.BASE64.indexOf(this.processed.charAt(j)) < 0) {
+                        ColorfulHash.Msg.error("'" + hash + "' is invalid BASE64 hash.");
+                        return;
+                    }
+                }
+                break;
+            default:
+                ColorfulHash.Msg.error("Unknown encoding '" + encoding + "'.");
+                return;
+        }
+        // Cache values.
+        this.hash = hash;
+        this.encoding = encoding;
     };
+
+    /**
+     * Converts a hash to a list of numbers.
+     * @return {Array} list of numbers
+     */
+    ColorfulHash.Hash.prototype.toNumbers = function() {
+        var numbers = [];
+        switch (this.encoding) {
+            case ColorfulHash.ENCODING.HEX:
+                for (var i = 0; i < this.processed.length; i++) {
+                    numbers.push(ColorfulHash.CHARSET.HEX.indexOf(this.processed.charAt(i)));
+                }
+                break;
+            case ColorfulHash.ENCODING.BASE64:
+                for (var j = 0; j < this.processed.length; j++) {
+                    numbers.push(ColorfulHash.CHARSET.BASE64.indexOf(this.processed.charAt(j)));
+                }
+                break;
+            default:
+                ColorfulHash.Msg.error("Unknown encoding '" + encoding + "'.");
+                return [];
+                break;
+        }
+        return numbers;
+    };
+
+    /** Simple tests. */
+    // var hash_invalid_1 = new ColorfulHash.Hash(1, "");
+    // var hash_invalid_2 = new ColorfulHash.Hash("", "");
+    // var hash_invalid_3 = new ColorfulHash.Hash("gkj", ColorfulHash.ENCODING.HEX);
+    // var hash_invalid_4 = new ColorfulHash.Hash("@@", ColorfulHash.ENCODING.BASE64);
+    // var hash_valid_1 = new ColorfulHash.Hash("39 72 4b 1e 5a 7d 2c f3 2c 22", ColorfulHash.ENCODING.HEX);
+    // console.log(hash_valid_1.toNumbers());
+    // console.log(hash_valid_1.hash + ', ' + hash_valid_1.processed);
+    // var hash_valid_2 = new ColorfulHash.Hash("cm Fu ZG 9t c2 Q=", ColorfulHash.ENCODING.BASE64);
+    // console.log(hash_valid_2.toNumbers());
+    // console.log(hash_valid_2.hash + ', ' + hash_valid_2.processed);
 
 })();

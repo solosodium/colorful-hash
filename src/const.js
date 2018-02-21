@@ -1,12 +1,10 @@
-var coha = coha || {};
-
 (function() {
 
     /**
      * Hash encoding constants.
      * @type {{HEX: string, BASE64: string}}
      */
-    coha.ENCODING = {
+    ColorfulHash.ENCODING = {
         HEX: 'hex',
         BASE64: 'base64'
     };
@@ -15,7 +13,7 @@ var coha = coha || {};
      * Hash encoding charsets.
      * @type {{HEX: [string], BASE64: [string]}}
      */
-    coha.CHARSET = {
+    ColorfulHash.CHARSET = {
         HEX: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
             'a', 'b', 'c', 'd', 'e', 'f'],
         BASE64: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -28,46 +26,35 @@ var coha = coha || {};
     };
 
     /**
-     * Hash encoding number range (maximum value).
-     * @type {{HEX: Number, BASE64: Number}}
-     */
-    coha.RANGE = {
-        HEX: {
-            MIN: 0,
-            MAX: coha.CHARSET.HEX.length - 1,
-            LENGTH: coha.CHARSET.HEX.length
-        },
-        BASE64: {
-            MIN: 0,
-            MAX: coha.CHARSET.BASE64.length - 1,
-            LENGTH: coha.CHARSET.BASE64.length
-        }
-    };
-
-    /**
-     * UUID regex.
+     * UUID RegEx.
      * @type {string}
      */
-    coha.UUID_REGEX = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+    ColorfulHash.UUID_REGEX = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
 
     /**
      * Message prefix string.
      * @type {string}
      */
-    coha.MSG_PREFIX = '[coha] ';
+    ColorfulHash.MSG_PREFIX = '[colorful-hash] ';
 
     /**
      * Message logging level.
-     * ------------------------------
-     * | level | log | warn | error |
-     * |----------------------------|
-     * |   0   |  n  |  n   |   n   |
-     * |   1   |  n  |  n   |   y   |
-     * |   2   |  n  |  y   |   y   |
-     * |   3   |  y  |  y   |   y   |
-     * ------------------------------
+     * ---------------------------------
+     * | level |  log  | warn  | error |
+     * |-------------------------------|
+     * |   0   |   n   |   n   |   n   |
+     * |   1   |   n   |   n   |   y   |
+     * |   2   |   n   |   y   |   y   |
+     * |   3   |   y   |   y   |   y   |
+     * ---------------------------------
      * @type {number}
      */
-    coha.MSG_LEVEL = 3;
+    ColorfulHash.MSG_LEVEL = 3;
+
+    /**
+     * Custom DOM name.
+     * @type {string}
+     */
+    ColorfulHash.DOM = 'colorful-hash';
 
 })();
