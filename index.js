@@ -24,6 +24,7 @@ const SRC_FILES = [
     'range.js',
     'color.js',
     'map.js',
+    'scheme.js',
     'element.js',
 ];
 

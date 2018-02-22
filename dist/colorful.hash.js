@@ -71,20 +71,27 @@ ColorfulHash.Msg = function() {}, ColorfulHash.Msg.log = function(o) {
 }, ColorfulHash.Range.prototype.contains = function(o) {
     return ColorfulHash.Util.isNumber(o) ? o >= this.left && o <= this.right : (ColorfulHash.Msg.error("Value '" + o + "' is not a number."), 
     !1);
-}, function() {
-    ColorfulHash.Color = function(o, r, s, l) {
-        if (this.r = 0, this.g = 0, this.b = 0, this.a = 0, ColorfulHash.Util.isRGBA(o)) if (ColorfulHash.Util.isRGBA(r)) if (ColorfulHash.Util.isRGBA(s)) if (this.r = o, 
-        this.g = r, this.b = s, l) {
-            if (!ColorfulHash.Util.isRGBA(l)) return void ColorfulHash.Msg.error("Alpha '" + l + "' is not a valid value. Should between 0 and 1.");
-            this.a = l;
-        } else this.a = 1; else ColorfulHash.Msg.error("Blue '" + s + "' is not a valid value. Should between 0 and 1."); else ColorfulHash.Msg.error("Green '" + r + "' is not a valid value. Should between 0 and 1."); else ColorfulHash.Msg.error("Red '" + o + "' is not a valid value. Should between 0 and 1.");
-    };
-    var o = new ColorfulHash.Color(.5, .1, .3, .9);
-    console.log(o);
-    var r = new ColorfulHash.Color(.5, .1, .3);
-    console.log(r);
-}(), ColorfulHash.Map = function(o, r) {
+}, ColorfulHash.Color = function(o, r, s, l) {
+    if (this.r = 0, this.g = 0, this.b = 0, this.a = 0, ColorfulHash.Util.isRGBA(o)) if (ColorfulHash.Util.isRGBA(r)) if (ColorfulHash.Util.isRGBA(s)) if (this.r = o, 
+    this.g = r, this.b = s, l) {
+        if (!ColorfulHash.Util.isRGBA(l)) return void ColorfulHash.Msg.error("Alpha '" + l + "' is not a valid value. Should between 0 and 1.");
+        this.a = l;
+    } else this.a = 1; else ColorfulHash.Msg.error("Blue '" + s + "' is not a valid value. Should between 0 and 1."); else ColorfulHash.Msg.error("Green '" + r + "' is not a valid value. Should between 0 and 1."); else ColorfulHash.Msg.error("Red '" + o + "' is not a valid value. Should between 0 and 1.");
+}, ColorfulHash.Map = function(o, r) {
     ColorfulHash.Util.isRange(o) ? ColorfulHash.Util.isColor(r) ? (this.range = o, this.color = r) : ColorfulHash.Msg.error("Invalid color '" + r + "'.") : ColorfulHash.Msg.error("Invalid range '" + o + "'.");
+}, ColorfulHash.Scheme = function(o) {
+    switch (this.range = new ColorfulHash.Range(0, 0), o) {
+      case ColorfulHash.ENCODING.HEX:
+        this.range.right = ColorfulHash.CHARSET.HEX.length - 1;
+        break;
+
+      case ColorfulHash.ENCODING.BASE64:
+        this.range.right = ColorfulHash.CHARSET.BASE64.length - 1;
+        break;
+
+      default:
+        ColorfulHash.Msg.error("Unknown encoding '" + o + "'.");
+    }
 }, ColorfulHash.Element = function(o) {
     this.element = document.getElementById(o);
 };

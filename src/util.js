@@ -53,4 +53,13 @@
         return color instanceof ColorfulHash.Color;
     };
 
+    /**
+     * Check if map is of class Map.
+     * @param map
+     * @return {boolean}
+     */
+    ColorfulHash.Util.isMap = function(map) {
+        return map instanceof ColorfulHash.Map;
+    };
+
 })();
