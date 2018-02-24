@@ -4,7 +4,7 @@
      * Util class.
      * @constructor
      */
-    ColorfulHash.Util = function() {
+    CH.Util = function() {
         /** Do nothing. */
     };
 
@@ -13,7 +13,7 @@
      * @param number
      * @return {boolean}
      */
-    ColorfulHash.Util.isNumber = function(number) {
+    CH.Util.isNumber = function(number) {
         return !isNaN(number) && isFinite(number);
     };
 
@@ -22,7 +22,7 @@
      * @param string
      * @return {boolean}
      */
-    ColorfulHash.Util.isString = function(string) {
+    CH.Util.isString = function(string) {
         return (typeof string === 'string') || (string instanceof String);
     };
 
@@ -31,8 +31,8 @@
      * @param value
      * @return {boolean}
      */
-    ColorfulHash.Util.isRGBA = function(value) {
-        return ColorfulHash.Util.isNumber(value) && (value >= 0 && value <= 1);
+    CH.Util.isRGBA = function(value) {
+        return CH.Util.isNumber(value) && (value >= 0 && value <= 1);
     };
 
     /**
@@ -40,8 +40,8 @@
      * @param range
      * @return {boolean}
      */
-    ColorfulHash.Util.isRange = function(range) {
-        return range instanceof ColorfulHash.Range;
+    CH.Util.isRange = function(range) {
+        return range instanceof CH.Range;
     };
 
     /**
@@ -49,8 +49,8 @@
      * @param color
      * @return {boolean}
      */
-    ColorfulHash.Util.isColor = function(color) {
-        return color instanceof ColorfulHash.Color;
+    CH.Util.isColor = function(color) {
+        return color instanceof CH.Color;
     };
 
     /**
@@ -58,8 +58,17 @@
      * @param map
      * @return {boolean}
      */
-    ColorfulHash.Util.isMap = function(map) {
-        return map instanceof ColorfulHash.Map;
+    CH.Util.isMap = function(map) {
+        return map instanceof CH.Map;
+    };
+
+    /**
+     * Check if scheme is of class Scheme.
+     * @param scheme
+     * @return {boolean}
+     */
+    CH.Util.isScheme = function(scheme) {
+        return scheme instanceof CH.Scheme;
     };
 
 })();

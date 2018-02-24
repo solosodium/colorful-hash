@@ -4,7 +4,7 @@
      * Hash encoding constants.
      * @type {{HEX: string, BASE64: string}}
      */
-    ColorfulHash.ENCODING = {
+    CH.ENCODING = {
         HEX: 'hex',
         BASE64: 'base64'
     };
@@ -13,7 +13,7 @@
      * Hash encoding charsets.
      * @type {{HEX: [string], BASE64: [string]}}
      */
-    ColorfulHash.CHARSET = {
+    CH.CHARSET = {
         HEX: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
               'a', 'b', 'c', 'd', 'e', 'f'],
         BASE64: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -29,13 +29,13 @@
      * UUID RegEx.
      * @type {string}
      */
-    ColorfulHash.UUID_REGEX = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
+    CH.UUID_REGEX = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
 
     /**
      * Message prefix string.
      * @type {string}
      */
-    ColorfulHash.MSG_PREFIX = '[colorful-hash] ';
+    CH.MSG_PREFIX = '[colorful-hash] ';
 
     /**
      * Message logging level.
@@ -49,12 +49,6 @@
      * ---------------------------------
      * @type {number}
      */
-    ColorfulHash.MSG_LEVEL = 3;
-
-    /**
-     * Custom DOM name.
-     * @type {string}
-     */
-    ColorfulHash.DOM = 'colorful-hash';
+    CH.MSG_LEVEL = 3;
 
 })();
