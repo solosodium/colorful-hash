@@ -3,11 +3,11 @@
     /**
      * Hash class.
      * @param hash
-     * @param encoding  hash encoding (hex or base64)
+     * @param encoding hash encoding (hex or base64)
      * @constructor
      */
     CH.Hash = function(hash, encoding) {
-        this.hash = '';
+        this.raw = '';
         this.processed = '';
         this.encoding = '';
         // Expect hash to be a string.
@@ -44,12 +44,12 @@
                 return;
         }
         // Cache values.
-        this.hash = hash;
+        this.raw = hash;
         this.encoding = encoding;
     };
 
     /**
-     * Converts a hash to a list of numbers.
+     * Convert a hash to a list of numbers.
      * @return {Array} list of numbers
      */
     CH.Hash.prototype.toNumbers = function() {
@@ -73,6 +73,14 @@
         return numbers;
     };
 
+    /**
+     * Convert a hash to a list of characters.
+     * @return {Array} list of characters
+     */
+    CH.Hash.prototype.toCharacters = function() {
+        return Array.from(this.processed);
+    };
+
     /** Simple tests. */
     // var hash_invalid_1 = new CH.Hash(1, "");
     // var hash_invalid_2 = new CH.Hash("", "");
@@ -80,9 +88,10 @@
     // var hash_invalid_4 = new CH.Hash("@@", CH.ENCODING.BASE64);
     // var hash_valid_1 = new CH.Hash("39 72 4b 1e 5a 7d 2c f3 2c 22", CH.ENCODING.HEX);
     // console.log(hash_valid_1.toNumbers());
-    // console.log(hash_valid_1.hash + ', ' + hash_valid_1.processed);
+    // console.log(hash_valid_1.raw + ', ' + hash_valid_1.processed);
     // var hash_valid_2 = new CH.Hash("cm Fu ZG 9t c2 Q=", CH.ENCODING.BASE64);
     // console.log(hash_valid_2.toNumbers());
-    // console.log(hash_valid_2.hash + ', ' + hash_valid_2.processed);
+    // console.log(hash_valid_2.raw + ', ' + hash_valid_2.processed);
+    // console.log(hash_valid_2.toCharacters());
 
 })();

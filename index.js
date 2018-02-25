@@ -9,7 +9,8 @@ const uglify = require('uglify-js');
 // Constants.
 const SRC_DIR_PATH = './src';
 const DEST_DIR_PATH = './dist';
-const OUTPUT_FILE = 'colorful.hash.js';
+const OUTPUT_FILE_MAX = 'colorful.hash.js';
+const OUTPUT_FILE_MIN = 'colorful.hash.min.js';
 const PATH_DELIMITER = '/';
 const FILE_ENCODING = 'utf8';
 
@@ -29,11 +30,20 @@ const SRC_FILES = [
 ];
 
 // Uglify options.
-let options = {
+let maxOptions = {
     toplevel: false,
+    compress: false,
     output: {
         beautify: true,
-        preamble: '/* '+ OUTPUT_FILE +' */'
+        preamble: '/* '+ OUTPUT_FILE_MAX +' */'
+    }
+};
+let minOptions = {
+    toplevel: false,
+    compress: true,
+    output: {
+        beautify: false,
+        preamble: '/* '+ OUTPUT_FILE_MIN +' */'
     }
 };
 
@@ -56,17 +66,29 @@ fs.readdir(SRC_DIR_PATH, function(err, files) {
                 console.log(" - Found: '" + file + "'");
             }
         });
-        // Generate uglified code.
-        let outputCode = uglify.minify(file2Code, options);
-        if (outputCode.hasOwnProperty('error')) {
-            console.error("Compilation failed:", outputCode);
+        // Generate (non) uglified code (max).
+        let outputCodeMax = uglify.minify(file2Code, maxOptions);
+        if (outputCodeMax.hasOwnProperty('error')) {
+            console.error("Compile '" + OUTPUT_FILE_MAX + "' failed:", outputCodeMax);
         } else {
             fs.writeFileSync(
-                DEST_DIR_PATH + PATH_DELIMITER + OUTPUT_FILE,
-                outputCode.code,
+                DEST_DIR_PATH + PATH_DELIMITER + OUTPUT_FILE_MAX,
+                outputCodeMax.code,
                 FILE_ENCODING);
             // Done!
-            console.log(OUTPUT_FILE + " compiled successfully!");
+            console.log("'" + OUTPUT_FILE_MAX + "' compiled successfully!");
+        }
+        // Generate uglified code (max).
+        let outputCodeMin = uglify.minify(file2Code, minOptions);
+        if (outputCodeMin.hasOwnProperty('error')) {
+            console.error("Compile '" + OUTPUT_FILE_MIN + "' failed:", outputCodeMin);
+        } else {
+            fs.writeFileSync(
+                DEST_DIR_PATH + PATH_DELIMITER + OUTPUT_FILE_MIN,
+                outputCodeMin.code,
+                FILE_ENCODING);
+            // Done!
+            console.log("'" + OUTPUT_FILE_MIN + "' compiled successfully!");
         }
     }
 });

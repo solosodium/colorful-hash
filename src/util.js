@@ -27,7 +27,7 @@
     };
 
     /**
-     * Check if a value is valid RGBA value.,
+     * Check if a value is valid RGBA value (between 0 to 1).
      * @param value
      * @return {boolean}
      */
@@ -69,6 +69,24 @@
      */
     CH.Util.isScheme = function(scheme) {
         return scheme instanceof CH.Scheme;
+    };
+
+    /**
+     * Check if raw is of class Hash.
+     * @param hash
+     * @return {boolean}
+     */
+    CH.Util.isHash = function(hash) {
+        return hash instanceof CH.Hash;
+    };
+
+    /**
+     * Check if value is null or undefined.
+     * @param value
+     * @return {boolean}
+     */
+    CH.Util.isNullOrUndefined = function(value) {
+        return (value === null) || (typeof value === 'undefined');
     };
 
 })();

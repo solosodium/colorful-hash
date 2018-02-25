@@ -42,6 +42,18 @@
     };
 
     /**
+     * Color to rgba(r, g, b, a) string.
+     * @return {string}
+     */
+    CH.Color.prototype.toRGBAString = function() {
+        return 'rgba('
+            + Math.floor(this.r * 255) + ' ,'
+            + Math.floor(this.g * 255) + ' ,'
+            + Math.floor(this.b * 255) + ' ,'
+            + this.a + ')';
+    };
+
+    /**
      * Copy constructor of color.
      * @param color
      */

@@ -1,6 +1,6 @@
 <html>
 <head>
-    <script type="application/javascript" src="../dist/colorful.hash.js"></script>
+    <script type="application/javascript" src="../dist/colorful.hash.min.js"></script>
     <style>
         html {
             font-family: monospace;
@@ -10,9 +10,16 @@
 <body>
 <h1>Colorful Hash Demo</h1>
 
-<svg id="hash" width="600px" height="30px"></svg>
+<svg id="hash" width="100%" height="10px"></svg>
 
 <script type="application/javascript">
+    var hash = new CH.Hash('11ede4d3e5411bb9b2801b49693018d9', CH.ENCODING.HEX);
+    var scheme = new CH.Scheme(CH.ENCODING.HEX);
+    for (var i=0; i<16; i++) {
+        scheme.addMap(new CH.Map(new CH.Range(i, i+1), new CH.Color(i/16, i/16, i/16, 1)));
+    }
+    var element = new CH.Element('hash', hash, scheme);
+    element.draw();
 </script>
 </body>
 </html>
