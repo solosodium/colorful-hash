@@ -8,7 +8,6 @@
      * @constructor
      */
     CH.Element = function(id, hash, scheme) {
-        // Get id and SVG element.
         if (!CH.Util.isString(id)) {
             CH.Msg.error("Element id '" + id + "' is not a string.");
             return;
@@ -17,15 +16,26 @@
         this.element = document.getElementById(id);
         if (CH.Util.isNullOrUndefined(this.element)) {
             CH.Msg.error("Can't find element with id '" + id + "'.");
-            return;
         }
-        // Get hash.
+    };
+
+    /**
+     * Set hash.
+     * @param hash
+     */
+    CH.Element.prototype.setHash = function(hash) {
         if (!CH.Util.isHash(hash)) {
             CH.Msg.error("Invalid hash '" + JSON.stringify(hash) + "'.");
             return;
         }
         this.hash = hash;
-        // Get scheme.
+    };
+
+    /**
+     * Set scheme.
+     * @param scheme
+     */
+    CH.Element.prototype.setScheme = function(scheme) {
         if (!CH.Util.isScheme(scheme)) {
             CH.Msg.error("Invalid scheme '" + JSON.stringify(scheme) + "'.");
             return;

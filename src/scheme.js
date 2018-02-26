@@ -64,6 +64,49 @@
         return new CH.Color.copy(this.defaultColor);
     };
 
+    /**
+     * Create a color scheme based on two colors (linearly interpreted).
+     * @param encoding
+     * @param colorA
+     * @param colorB
+     */
+    CH.Scheme.twoColorLinear = function(encoding, colorA, colorB) {
+        if (!CH.Util.isColor(colorA)) {
+            CH.Msg.error("Invalid colorA '" + JSON.stringify(colorA) + "'.");
+            return;
+        }
+        if (!CH.Util.isColor(colorB)) {
+            CH.Msg.error("Invalid colorB '" + JSON.stringify(colorB) + "'.");
+            return;
+        }
+        var length = 0;
+        switch (encoding) {
+            case CH.ENCODING.HEX:
+                length = CH.CHARSET.HEX.length;
+                break;
+            case CH.ENCODING.BASE64:
+                length = CH.CHARSET.BASE64.length;
+                break;
+            default:
+                CH.Msg.error("Unknown encoding '" + encoding + "'.");
+                return;
+        }
+        var scheme = new CH.Scheme(CH.ENCODING.HEX);
+        for (var i=0; i<length; i++) {
+            scheme.addMap(
+                new CH.Map(new CH.Range(i, i+1),
+                    new CH.Color(
+                        colorA.r + (colorB.r - colorA.r) * i / (length - 1),
+                        colorA.g + (colorB.g - colorA.g) * i / (length - 1),
+                        colorA.b + (colorB.b - colorA.b) * i / (length - 1),
+                        colorA.a + (colorB.a - colorA.a) * i / (length - 1)
+                    )
+                )
+            );
+        }
+        return scheme;
+    };
+
     /** Simple tests. */
     // var scheme_invalid_1 = new CH.Scheme('what');
     // scheme_invalid_1.addMap('what');
@@ -77,5 +120,8 @@
     // scheme_valid_2.addMap(new CH.Map(new CH.Range(6, 9), new CH.Color(0, 0, 1)));
     // console.log(JSON.stringify(scheme_valid_2.maps));
     // console.log(scheme_valid_2.getColor(8));
+    // var scheme_valid_3 = CH.Scheme.twoColorLinear(
+    //     CH.ENCODING.HEX, new CH.Color(0.5, 0.2, 0.1), new CH.Color(0.6, 1.0, 0.3));
+    // console.log(scheme_valid_3);
 
 })();

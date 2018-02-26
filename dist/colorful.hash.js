@@ -88,8 +88,8 @@ var CH = CH || {};
 
           case CH.ENCODING.BASE64:
             this.processed = this.processed.replace(new RegExp("=", "g"), "");
-            for (var i = 0; i < this.processed.length; i++) {
-                if (CH.CHARSET.BASE64.indexOf(this.processed.charAt(i)) < 0) {
+            for (var n = 0; n < this.processed.length; n++) {
+                if (CH.CHARSET.BASE64.indexOf(this.processed.charAt(n)) < 0) {
                     CH.Msg.error("'" + t + "' is invalid BASE64 hash.");
                     return;
                 }
@@ -185,7 +185,7 @@ var CH = CH || {};
 })();
 
 (function() {
-    CH.Color = function(t, e, r, i) {
+    CH.Color = function(t, e, r, n) {
         this.r = 0;
         this.g = 0;
         this.b = 0;
@@ -205,12 +205,12 @@ var CH = CH || {};
         this.r = t;
         this.g = e;
         this.b = r;
-        if (i) {
-            if (!CH.Util.isRGBA(i)) {
-                CH.Msg.error("Alpha '" + i + "' is not a valid value. Should between 0 and 1.");
+        if (n) {
+            if (!CH.Util.isRGBA(n)) {
+                CH.Msg.error("Alpha '" + n + "' is not a valid value. Should between 0 and 1.");
                 return;
             } else {
-                this.a = i;
+                this.a = n;
             }
         } else {
             this.a = 1;
@@ -292,6 +292,37 @@ var CH = CH || {};
         }
         return new CH.Color.copy(this.defaultColor);
     };
+    CH.Scheme.twoColorLinear = function(t, e, r) {
+        if (!CH.Util.isColor(e)) {
+            CH.Msg.error("Invalid colorA '" + JSON.stringify(e) + "'.");
+            return;
+        }
+        if (!CH.Util.isColor(r)) {
+            CH.Msg.error("Invalid colorB '" + JSON.stringify(r) + "'.");
+            return;
+        }
+        var n = 0;
+        switch (t) {
+          case CH.ENCODING.HEX:
+            n = CH.CHARSET.HEX.length;
+            break;
+
+          case CH.ENCODING.BASE64:
+            n = CH.CHARSET.BASE64.length;
+            break;
+
+          default:
+            CH.Msg.error("Unknown encoding '" + t + "'.");
+            return;
+        }
+        var i = new CH.Scheme(CH.ENCODING.HEX);
+        for (var o = 0; o < n; o++) {
+            i.addMap(new CH.Map(new CH.Range(o, o + 1), new CH.Color(e.r + (r.r - e.r) * o / (n - 1), e.g + (r.g - e.g) * o / (n - 1), e.b + (r.b - e.b) * o / (n - 1), e.a + (r.a - e.a) * o / (n - 1))));
+        }
+        return i;
+    };
+    var t = CH.Scheme.twoColorLinear(CH.ENCODING.HEX, new CH.Color(.5, .2, .1), new CH.Color(.6, 1, .3));
+    console.log(t);
 })();
 
 (function() {
@@ -304,32 +335,35 @@ var CH = CH || {};
         this.element = document.getElementById(t);
         if (CH.Util.isNullOrUndefined(this.element)) {
             CH.Msg.error("Can't find element with id '" + t + "'.");
+        }
+    };
+    CH.Element.prototype.setHash = function(t) {
+        if (!CH.Util.isHash(t)) {
+            CH.Msg.error("Invalid hash '" + JSON.stringify(t) + "'.");
             return;
         }
-        if (!CH.Util.isHash(e)) {
-            CH.Msg.error("Invalid hash '" + JSON.stringify(e) + "'.");
+        this.hash = t;
+    };
+    CH.Element.prototype.setScheme = function(t) {
+        if (!CH.Util.isScheme(t)) {
+            CH.Msg.error("Invalid scheme '" + JSON.stringify(t) + "'.");
             return;
         }
-        this.hash = e;
-        if (!CH.Util.isScheme(r)) {
-            CH.Msg.error("Invalid scheme '" + JSON.stringify(r) + "'.");
-            return;
-        }
-        this.scheme = r;
+        this.scheme = t;
     };
     CH.Element.prototype.draw = function() {
         var t = parseInt(this.element.getAttribute("width"), 10);
         var e = this.element.getAttribute("width").replace(t.toString(), "");
         var r = this.element.getAttribute("height");
-        var i = this.hash.toNumbers();
-        for (var n = 0; n < i.length; n++) {
-            var s = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            s.setAttribute("x", t / i.length * n + e);
-            s.setAttribute("y", 0);
-            s.setAttribute("width", t / i.length * 1.02 + e);
-            s.setAttribute("height", r);
-            s.setAttribute("fill", this.scheme.getColor(i[n]).toRGBAString());
-            this.element.appendChild(s);
+        var n = this.hash.toNumbers();
+        for (var i = 0; i < n.length; i++) {
+            var o = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            o.setAttribute("x", t / n.length * i + e);
+            o.setAttribute("y", 0);
+            o.setAttribute("width", t / n.length * 1.02 + e);
+            o.setAttribute("height", r);
+            o.setAttribute("fill", this.scheme.getColor(n[i]).toRGBAString());
+            this.element.appendChild(o);
         }
     };
 })();

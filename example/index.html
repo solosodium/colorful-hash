@@ -1,6 +1,6 @@
 <html>
 <head>
-    <script type="application/javascript" src="../dist/colorful.hash.min.js"></script>
+    <script type="application/javascript" src="../dist/colorful.hash.js"></script>
     <style>
         html {
             font-family: monospace;
@@ -9,17 +9,31 @@
 </head>
 <body>
 <h1>Colorful Hash Demo</h1>
-
+<hr>
+<h2>HEX</h2>
+<h3>Color Scheme Scale: 0123456789abcdef</h3>
+<svg id="scale" width="100%" height="10px"></svg>
+<h3>Hash Code: 11ede4d3e5411bb9b2801b49693018d9</h3>
 <svg id="hash" width="100%" height="10px"></svg>
+<br>
+<h2>BASE64</h2>
 
 <script type="application/javascript">
     var hash = new CH.Hash('11ede4d3e5411bb9b2801b49693018d9', CH.ENCODING.HEX);
-    var scheme = new CH.Scheme(CH.ENCODING.HEX);
-    for (var i=0; i<16; i++) {
-        scheme.addMap(new CH.Map(new CH.Range(i, i+1), new CH.Color(i/16, i/16, i/16, 1)));
-    }
-    var element = new CH.Element('hash', hash, scheme);
-    element.draw();
+    var scale = new CH.Hash('0123456789abcdef', CH.ENCODING.HEX);
+
+    var scheme = CH.Scheme.twoColorLinear(CH.ENCODING.HEX,
+        new CH.Color(0.96, 0.26, 0.58), new CH.Color(0.16, 0.48, 0.80));
+
+    var element1 = new CH.Element('hash');
+    element1.setHash(hash);
+    element1.setScheme(scheme);
+    element1.draw();
+
+    var element2 = new CH.Element('scale');
+    element2.setHash(scale);
+    element2.setScheme(scheme);
+    element2.draw();
 </script>
 </body>
 </html>
