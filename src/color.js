@@ -13,15 +13,15 @@
         this.g = 0;
         this.b = 0;
         this.a = 0;
-        if (!CH.Util.isRGBA(r)) {
+        if (!CH.Util.isRGBAValue(r)) {
             CH.Msg.error("Red '" + r + "' is not a valid value. Should between 0 and 1.");
             return;
         }
-        if (!CH.Util.isRGBA(g)) {
+        if (!CH.Util.isRGBAValue(g)) {
             CH.Msg.error("Green '" + g + "' is not a valid value. Should between 0 and 1.");
             return;
         }
-        if (!CH.Util.isRGBA(b)) {
+        if (!CH.Util.isRGBAValue(b)) {
             CH.Msg.error("Blue '" + b + "' is not a valid value. Should between 0 and 1.");
             return;
         }
@@ -29,7 +29,7 @@
         this.g = g;
         this.b = b;
         if (a) {
-            if (!CH.Util.isRGBA(a)) {
+            if (!CH.Util.isRGBAValue(a)) {
                 CH.Msg.error("Alpha '" + a + "' is not a valid value. Should between 0 and 1.");
                 return;
             } else {

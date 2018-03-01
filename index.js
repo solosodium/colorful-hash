@@ -18,6 +18,7 @@ const FILE_ENCODING = 'utf8';
 const SRC_FILES = [
     'main.js',
     'const.js',
+    'exception.js',
     'msg.js',
     'util.js',
     'hash.js',

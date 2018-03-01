@@ -1,6 +1,10 @@
 /* colorful.hash.js */
 var CH = CH || {};
 
+CH.hex = function(t, e, n, i) {
+    var r = new CH.Element(t);
+};
+
 (function() {
     CH.ENCODING = {
         HEX: "hex",
@@ -13,6 +17,14 @@ var CH = CH || {};
     CH.UUID_REGEX = new RegExp("^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$");
     CH.MSG_PREFIX = "[colorful-hash] ";
     CH.MSG_LEVEL = 3;
+    CH.EXCEPTION_PREFIX = "Exception: ";
+})();
+
+(function() {
+    CH.Exception = function() {};
+    CH.Exception.throw = function(t) {
+        throw CH.EXCEPTION_PREFIX + t;
+    };
 })();
 
 (function() {
@@ -37,12 +49,12 @@ var CH = CH || {};
 (function() {
     CH.Util = function() {};
     CH.Util.isNumber = function(t) {
-        return !isNaN(t) && isFinite(t);
+        return typeof t === "number" && !isNaN(t) && isFinite(t);
     };
     CH.Util.isString = function(t) {
         return typeof t === "string" || t instanceof String;
     };
-    CH.Util.isRGBA = function(t) {
+    CH.Util.isRGBAValue = function(t) {
         return CH.Util.isNumber(t) && (t >= 0 && t <= 1);
     };
     CH.Util.isRange = function(t) {
@@ -67,41 +79,35 @@ var CH = CH || {};
 
 (function() {
     CH.Hash = function(t, e) {
-        this.raw = "";
-        this.processed = "";
-        this.encoding = "";
         if (!CH.Util.isString(t)) {
-            CH.Msg.error("Hash '" + t + "' is not a string.");
-            return;
+            CH.Exception.throw("Hash '" + t + "' is not a string.");
         }
-        this.processed = t.replace(new RegExp(" ", "g"), "");
+        var n = t.replace(new RegExp(" ", "g"), "");
         switch (e) {
           case CH.ENCODING.HEX:
-            this.processed = this.processed.toLowerCase();
-            for (var r = 0; r < this.processed.length; r++) {
-                if (CH.CHARSET.HEX.indexOf(this.processed.charAt(r)) < 0) {
-                    CH.Msg.error("'" + t + "' is invalid HEX hash.");
-                    return;
+            n = n.toLowerCase();
+            for (var i = 0; i < n.length; i++) {
+                if (CH.CHARSET.HEX.indexOf(n.charAt(i)) < 0) {
+                    CH.Exception.throw("'" + t + "' is invalid HEX hash.");
                 }
             }
             break;
 
           case CH.ENCODING.BASE64:
-            this.processed = this.processed.replace(new RegExp("=", "g"), "");
-            for (var n = 0; n < this.processed.length; n++) {
-                if (CH.CHARSET.BASE64.indexOf(this.processed.charAt(n)) < 0) {
-                    CH.Msg.error("'" + t + "' is invalid BASE64 hash.");
-                    return;
+            n = n.replace(new RegExp("=", "g"), "");
+            for (var r = 0; r < n.length; r++) {
+                if (CH.CHARSET.BASE64.indexOf(n.charAt(r)) < 0) {
+                    CH.Exception.throw("'" + t + "' is invalid BASE64 hash.");
                 }
             }
             break;
 
           default:
-            CH.Msg.error("Unknown encoding '" + e + "'.");
-            return;
+            CH.Exception.throw("Unknown encoding '" + e + "'.");
         }
         this.raw = t;
         this.encoding = e;
+        this.processed = n;
     };
     CH.Hash.prototype.toNumbers = function() {
         var t = [];
@@ -113,8 +119,8 @@ var CH = CH || {};
             break;
 
           case CH.ENCODING.BASE64:
-            for (var r = 0; r < this.processed.length; r++) {
-                t.push(CH.CHARSET.BASE64.indexOf(this.processed.charAt(r)));
+            for (var n = 0; n < this.processed.length; n++) {
+                t.push(CH.CHARSET.BASE64.indexOf(this.processed.charAt(n)));
             }
             break;
 
@@ -134,18 +140,16 @@ var CH = CH || {};
     CH.Uuid = function(t) {
         this.uuid = "";
         if (!(typeof t === "string") && !(t instanceof String)) {
-            CH.Msg.error("UUID '" + t + "' is not a string.");
-            return;
+            CH.Exception.throw("UUID '" + t + "' is not a string.");
         }
         var e = t.match(CH.UUID_REGEX);
         if (!e || e.length === 0) {
-            CH.Msg.error("UUID '" + t + "' doesn't match format.");
-            return;
+            CH.Exception.throw("UUID '" + t + "' doesn't match format.");
         }
         this.uuid = t;
     };
     CH.Uuid.prototype.toHash = function() {
-        return this.uuid.replace(new RegExp("-", "g"), "");
+        return new CH.Hash(this.uuid.replace(new RegExp("-", "g"), ""), CH.ENCODING.HEX);
     };
 })();
 
@@ -154,16 +158,13 @@ var CH = CH || {};
         this.left = 0;
         this.right = 0;
         if (!CH.Util.isNumber(t)) {
-            CH.Msg.error("Left bound '" + t + "' is not a number.");
-            return;
+            CH.Exception.throw("Left bound '" + t + "' is not a number.");
         }
         if (!CH.Util.isNumber(e)) {
-            CH.Msg.error("Right bound '" + e + "' is not a number.");
-            return;
+            CH.Exception.throw("Right bound '" + e + "' is not a number.");
         }
         if (t >= e) {
-            CH.Msg.error("Right bound '" + e + "' is not larger than left bound '" + t + "'.");
-            return;
+            CH.Exception.throw("Right bound '" + e + "' is not larger than left bound '" + t + "'.");
         }
         this.left = t;
         this.right = e;
@@ -185,32 +186,32 @@ var CH = CH || {};
 })();
 
 (function() {
-    CH.Color = function(t, e, r, n) {
+    CH.Color = function(t, e, n, i) {
         this.r = 0;
         this.g = 0;
         this.b = 0;
         this.a = 0;
-        if (!CH.Util.isRGBA(t)) {
+        if (!CH.Util.isRGBAValue(t)) {
             CH.Msg.error("Red '" + t + "' is not a valid value. Should between 0 and 1.");
             return;
         }
-        if (!CH.Util.isRGBA(e)) {
+        if (!CH.Util.isRGBAValue(e)) {
             CH.Msg.error("Green '" + e + "' is not a valid value. Should between 0 and 1.");
             return;
         }
-        if (!CH.Util.isRGBA(r)) {
-            CH.Msg.error("Blue '" + r + "' is not a valid value. Should between 0 and 1.");
+        if (!CH.Util.isRGBAValue(n)) {
+            CH.Msg.error("Blue '" + n + "' is not a valid value. Should between 0 and 1.");
             return;
         }
         this.r = t;
         this.g = e;
-        this.b = r;
-        if (n) {
-            if (!CH.Util.isRGBA(n)) {
-                CH.Msg.error("Alpha '" + n + "' is not a valid value. Should between 0 and 1.");
+        this.b = n;
+        if (i) {
+            if (!CH.Util.isRGBAValue(i)) {
+                CH.Msg.error("Alpha '" + i + "' is not a valid value. Should between 0 and 1.");
                 return;
             } else {
-                this.a = n;
+                this.a = i;
             }
         } else {
             this.a = 1;
@@ -231,12 +232,10 @@ var CH = CH || {};
 (function() {
     CH.Map = function(t, e) {
         if (!CH.Util.isRange(t)) {
-            CH.Msg.error("Invalid range '" + JSON.stringify(t) + "'.");
-            return;
+            CH.Exception.throw("Invalid range '" + JSON.stringify(t) + "'.");
         }
         if (!CH.Util.isColor(e)) {
-            CH.Msg.error("Invalid color '" + JSON.stringify(e) + "'.");
-            return;
+            CH.Exception.throw("Invalid color '" + JSON.stringify(e) + "'.");
         }
         this.range = t;
         this.color = e;
@@ -292,78 +291,66 @@ var CH = CH || {};
         }
         return new CH.Color.copy(this.defaultColor);
     };
-    CH.Scheme.twoColorLinear = function(t, e, r) {
+    CH.Scheme.twoColorLinear = function(t, e, n) {
         if (!CH.Util.isColor(e)) {
             CH.Msg.error("Invalid colorA '" + JSON.stringify(e) + "'.");
             return;
         }
-        if (!CH.Util.isColor(r)) {
-            CH.Msg.error("Invalid colorB '" + JSON.stringify(r) + "'.");
+        if (!CH.Util.isColor(n)) {
+            CH.Msg.error("Invalid colorB '" + JSON.stringify(n) + "'.");
             return;
         }
-        var n = 0;
+        var i = 0;
         switch (t) {
           case CH.ENCODING.HEX:
-            n = CH.CHARSET.HEX.length;
+            i = CH.CHARSET.HEX.length;
             break;
 
           case CH.ENCODING.BASE64:
-            n = CH.CHARSET.BASE64.length;
+            i = CH.CHARSET.BASE64.length;
             break;
 
           default:
             CH.Msg.error("Unknown encoding '" + t + "'.");
             return;
         }
-        var i = new CH.Scheme(CH.ENCODING.HEX);
-        for (var o = 0; o < n; o++) {
-            i.addMap(new CH.Map(new CH.Range(o, o + 1), new CH.Color(e.r + (r.r - e.r) * o / (n - 1), e.g + (r.g - e.g) * o / (n - 1), e.b + (r.b - e.b) * o / (n - 1), e.a + (r.a - e.a) * o / (n - 1))));
+        var r = new CH.Scheme(CH.ENCODING.HEX);
+        for (var o = 0; o < i; o++) {
+            r.addMap(new CH.Map(new CH.Range(o, o + 1), new CH.Color(e.r + (n.r - e.r) * o / (i - 1), e.g + (n.g - e.g) * o / (i - 1), e.b + (n.b - e.b) * o / (i - 1), e.a + (n.a - e.a) * o / (i - 1))));
         }
-        return i;
+        return r;
     };
-    var t = CH.Scheme.twoColorLinear(CH.ENCODING.HEX, new CH.Color(.5, .2, .1), new CH.Color(.6, 1, .3));
-    console.log(t);
 })();
 
 (function() {
-    CH.Element = function(t, e, r) {
+    CH.Element = function(t, e, n) {
         if (!CH.Util.isString(t)) {
-            CH.Msg.error("Element id '" + t + "' is not a string.");
-            return;
+            CH.Exception.throw("Element id '" + t + "' is not a string.");
         }
         this.id = t;
         this.element = document.getElementById(t);
         if (CH.Util.isNullOrUndefined(this.element)) {
-            CH.Msg.error("Can't find element with id '" + t + "'.");
+            CH.Exception.throw("Can't find element with id '" + t + "'.");
         }
-    };
-    CH.Element.prototype.setHash = function(t) {
-        if (!CH.Util.isHash(t)) {
-            CH.Msg.error("Invalid hash '" + JSON.stringify(t) + "'.");
-            return;
+        if (!CH.Util.isScheme(e)) {
+            CH.Exception.throw("Invalid scheme '" + JSON.stringify(e) + "'.");
         }
-        this.hash = t;
-    };
-    CH.Element.prototype.setScheme = function(t) {
-        if (!CH.Util.isScheme(t)) {
-            CH.Msg.error("Invalid scheme '" + JSON.stringify(t) + "'.");
-            return;
+        this.scheme = e;
+        if (!CH.Util.isHash(n)) {
+            CH.Exception.throw("Invalid hash '" + JSON.stringify(n) + "'.");
         }
-        this.scheme = t;
+        this.hash = n;
     };
     CH.Element.prototype.draw = function() {
-        var t = parseInt(this.element.getAttribute("width"), 10);
-        var e = this.element.getAttribute("width").replace(t.toString(), "");
-        var r = this.element.getAttribute("height");
-        var n = this.hash.toNumbers();
-        for (var i = 0; i < n.length; i++) {
-            var o = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            o.setAttribute("x", t / n.length * i + e);
-            o.setAttribute("y", 0);
-            o.setAttribute("width", t / n.length * 1.02 + e);
-            o.setAttribute("height", r);
-            o.setAttribute("fill", this.scheme.getColor(n[i]).toRGBAString());
-            this.element.appendChild(o);
+        var t = this.hash.toNumbers();
+        for (var e = 0; e < t.length; e++) {
+            var n = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            n.setAttribute("x", 100 / t.length * e + "%");
+            n.setAttribute("y", 0);
+            n.setAttribute("width", 100 / t.length * 1.02 + "%");
+            n.setAttribute("height", "100%");
+            n.setAttribute("fill", this.scheme.getColor(t[e]).toRGBAString());
+            this.element.appendChild(n);
         }
     };
 })();

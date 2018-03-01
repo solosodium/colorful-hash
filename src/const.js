@@ -51,4 +51,10 @@
      */
     CH.MSG_LEVEL = 3;
 
+    /**
+     * Exception prefix string.
+     * @type {string}
+     */
+    CH.EXCEPTION_PREFIX = 'Exception: ';
+
 })();

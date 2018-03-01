@@ -14,7 +14,7 @@
      * @return {boolean}
      */
     CH.Util.isNumber = function(number) {
-        return !isNaN(number) && isFinite(number);
+        return (typeof number === 'number') && !isNaN(number) && isFinite(number);
     };
 
     /**
@@ -31,7 +31,7 @@
      * @param value
      * @return {boolean}
      */
-    CH.Util.isRGBA = function(value) {
+    CH.Util.isRGBAValue = function (value) {
         return CH.Util.isNumber(value) && (value >= 0 && value <= 1);
     };
 

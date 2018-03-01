@@ -3,66 +3,54 @@
     /**
      * Element class.
      * @param id
-     * @param hash
      * @param scheme
+     * @param hash
      * @constructor
      */
-    CH.Element = function(id, hash, scheme) {
+    CH.Element = function(id, scheme, hash) {
+        // Initialize id.
         if (!CH.Util.isString(id)) {
-            CH.Msg.error("Element id '" + id + "' is not a string.");
-            return;
+            CH.Exception.throw("Element id '" + id + "' is not a string.");
         }
         this.id = id;
+        // Initialize element with id.
         this.element = document.getElementById(id);
         if (CH.Util.isNullOrUndefined(this.element)) {
-            CH.Msg.error("Can't find element with id '" + id + "'.");
+            CH.Exception.throw("Can't find element with id '" + id + "'.");
         }
-    };
-
-    /**
-     * Set hash.
-     * @param hash
-     */
-    CH.Element.prototype.setHash = function(hash) {
-        if (!CH.Util.isHash(hash)) {
-            CH.Msg.error("Invalid hash '" + JSON.stringify(hash) + "'.");
-            return;
-        }
-        this.hash = hash;
-    };
-
-    /**
-     * Set scheme.
-     * @param scheme
-     */
-    CH.Element.prototype.setScheme = function(scheme) {
+        // Initialize scheme.
         if (!CH.Util.isScheme(scheme)) {
-            CH.Msg.error("Invalid scheme '" + JSON.stringify(scheme) + "'.");
-            return;
+            CH.Exception.throw("Invalid scheme '" + JSON.stringify(scheme) + "'.");
         }
         this.scheme = scheme;
+        // Initialize hash.
+        if (!CH.Util.isHash(hash)) {
+            CH.Exception.throw("Invalid hash '" + JSON.stringify(hash) + "'.");
+        }
+        this.hash = hash;
     };
 
     /**
      * Draw the hash with SVG element.
      */
     CH.Element.prototype.draw = function() {
-        // Get width ans height SVG element dimensions.
-        var width = parseInt(this.element.getAttribute('width'), 10);
-        var unit = this.element.getAttribute('width').replace(width.toString(), '');
-        var height = this.element.getAttribute('height');
         // Get numbers from hash.
         var numbers = this.hash.toNumbers();
+        // Draw numbers one by one.
         for (var i=0; i<numbers.length; i++) {
             var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            rect.setAttribute('x', width / numbers.length * i + unit);
+            rect.setAttribute('x', 100 / numbers.length * i + '%');
             rect.setAttribute('y', 0);
             // Adjust width by 2 percent to prevent artifact lines.
-            rect.setAttribute('width', (width / numbers.length * 1.02) + unit);
-            rect.setAttribute('height', height);
+            rect.setAttribute('width', (100 / numbers.length * 1.02) + '%');
+            rect.setAttribute('height', '100%');
             rect.setAttribute('fill', this.scheme.getColor(numbers[i]).toRGBAString());
             this.element.appendChild(rect);
         }
     };
+
+    /** Simple tests. */
+    // var element_invalid_1 = new CH.Element(12, null, null);
+    // var element_invalid_2 = new CH.Element('test', null, null);
 
 })();

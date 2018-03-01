@@ -10,13 +10,11 @@
         this.uuid = '';
         // Expect uuid to be a string.
         if (!(typeof uuid === 'string') && !(uuid instanceof String)) {
-            CH.Msg.error("UUID '" + uuid + "' is not a string.");
-            return;
+            CH.Exception.throw("UUID '" + uuid + "' is not a string.");
         }
         var match = uuid.match(CH.UUID_REGEX);
         if (!match || match.length === 0) {
-            CH.Msg.error("UUID '" + uuid + "' doesn't match format.");
-            return;
+            CH.Exception.throw("UUID '" + uuid + "' doesn't match format.");
         }
         // Cache uuid.
         this.uuid = uuid;
@@ -24,10 +22,10 @@
 
     /**
      * Gets processed version (remove '-') of UUID.
-     * @return {string}
+     * @return {CH.Hash}
      */
     CH.Uuid.prototype.toHash = function() {
-        return this.uuid.replace(new RegExp('-', 'g'), '');
+        return new CH.Hash(this.uuid.replace(new RegExp('-', 'g'), ''), CH.ENCODING.HEX);
     };
 
     /** Simple tests. */

@@ -2,19 +2,16 @@
 
     /**
      * Map (color to range) class.
-     *
      * @param range
      * @param color
      * @constructor
      */
     CH.Map = function(range, color) {
         if (!CH.Util.isRange(range)) {
-            CH.Msg.error("Invalid range '" + JSON.stringify(range) + "'.");
-            return;
+            CH.Exception.throw("Invalid range '" + JSON.stringify(range) + "'.");
         }
         if (!CH.Util.isColor(color)) {
-            CH.Msg.error("Invalid color '" + JSON.stringify(color) + "'.");
-            return;
+            CH.Exception.throw("Invalid color '" + JSON.stringify(color) + "'.");
         }
         this.range = range;
         this.color = color;

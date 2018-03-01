@@ -7,45 +7,39 @@
      * @constructor
      */
     CH.Hash = function(hash, encoding) {
-        this.raw = '';
-        this.processed = '';
-        this.encoding = '';
         // Expect hash to be a string.
         if (!CH.Util.isString(hash)) {
-            CH.Msg.error("Hash '" + hash + "' is not a string.");
-            return;
+            CH.Exception.throw("Hash '" + hash + "' is not a string.");
         }
         // Remove all white spaces.
-        this.processed = hash.replace(new RegExp(' ', 'g'), '');
+        var intermediate = hash.replace(new RegExp(' ', 'g'), '');
         // Check encoding case.
         switch (encoding) {
             case CH.ENCODING.HEX:
                 // HEX hash has to be converted to lower case first.
-                this.processed = this.processed.toLowerCase();
-                for (var i = 0; i < this.processed.length; i++) {
-                    if (CH.CHARSET.HEX.indexOf(this.processed.charAt(i)) < 0) {
-                        CH.Msg.error("'" + hash + "' is invalid HEX hash.");
-                        return;
+                intermediate = intermediate.toLowerCase();
+                for (var i = 0; i < intermediate.length; i++) {
+                    if (CH.CHARSET.HEX.indexOf(intermediate.charAt(i)) < 0) {
+                        CH.Exception.throw("'" + hash + "' is invalid HEX hash.");
                     }
                 }
                 break;
             case CH.ENCODING.BASE64:
                 // Remove end-of-string padding '='.
-                this.processed = this.processed.replace(new RegExp('=', 'g'), '');
-                for (var j = 0; j < this.processed.length; j++) {
-                    if (CH.CHARSET.BASE64.indexOf(this.processed.charAt(j)) < 0) {
-                        CH.Msg.error("'" + hash + "' is invalid BASE64 hash.");
-                        return;
+                intermediate = intermediate.replace(new RegExp('=', 'g'), '');
+                for (var j = 0; j < intermediate.length; j++) {
+                    if (CH.CHARSET.BASE64.indexOf(intermediate.charAt(j)) < 0) {
+                        CH.Exception.throw("'" + hash + "' is invalid BASE64 hash.");
                     }
                 }
                 break;
             default:
-                CH.Msg.error("Unknown encoding '" + encoding + "'.");
-                return;
+                CH.Exception.throw("Unknown encoding '" + encoding + "'.");
         }
         // Cache values.
         this.raw = hash;
         this.encoding = encoding;
+        this.processed = intermediate;
     };
 
     /**
