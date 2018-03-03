@@ -35,7 +35,7 @@
      * Message prefix string.
      * @type {string}
      */
-    CH.MSG_PREFIX = '[colorful-hash] ';
+    CH.MSG_PREFIX = '[CH] ';
 
     /**
      * Message logging level.
@@ -55,6 +55,6 @@
      * Exception prefix string.
      * @type {string}
      */
-    CH.EXCEPTION_PREFIX = 'Exception: ';
+    CH.EXCEPTION_PREFIX = 'colorful-hash exception: ';
 
 })();

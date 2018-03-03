@@ -17,8 +17,7 @@
                 this.range.right = CH.CHARSET.BASE64.length;
                 break;
             default:
-                CH.Msg.error("Unknown encoding '" + encoding + "'.");
-                break;
+                CH.Exception.throw("Unknown encoding '" + encoding + "'.");
         }
         // Create a series of unit (1) sized maps to cover the range.
         for (var i=this.range.left; i<this.range.right; i++) {
@@ -32,12 +31,10 @@
      */
     CH.Scheme.prototype.addMap = function(map) {
         if (!CH.Util.isMap(map)) {
-            CH.Msg.error("Invalid map '" + JSON.stringify(map) + "'.");
-            return;
+            CH.Exception.throw("Invalid map '" + JSON.stringify(map) + "'.");
         }
         if (!this.range.containsRange(map.range)) {
-            CH.Msg.error("Map '" + JSON.stringify(map) + "' is out of scheme's range.");
-            return;
+            CH.Exception.throw("Map '" + JSON.stringify(map) + "' is out of scheme's range.");
         }
         for (var i=0; i<this.maps.length; i++) {
             if (map.range.containsRange(this.maps[i].range)) {
@@ -53,15 +50,14 @@
      */
     CH.Scheme.prototype.getColor = function(value) {
         if (!CH.Util.isNumber(value)) {
-            CH.Msg.error("Value '" + value + "' is not a number.");
-            return CH.Color.copy(this.defaultColor);
+            CH.Exception.throw("Value '" + value + "' is not a number.");
         }
         for (var i=0; i<this.maps.length; i++) {
             if (this.maps[i].range.containsValue(value)) {
                 return CH.Color.copy(this.maps[i].color);
             }
         }
-        return new CH.Color.copy(this.defaultColor);
+        CH.Exception.throw("Value '" + value + "' is not in scheme range.");
     };
 
     /**
@@ -72,12 +68,10 @@
      */
     CH.Scheme.twoColorLinear = function(encoding, colorA, colorB) {
         if (!CH.Util.isColor(colorA)) {
-            CH.Msg.error("Invalid colorA '" + JSON.stringify(colorA) + "'.");
-            return;
+            CH.Exception.throw("Invalid colorA '" + JSON.stringify(colorA) + "'.");
         }
         if (!CH.Util.isColor(colorB)) {
-            CH.Msg.error("Invalid colorB '" + JSON.stringify(colorB) + "'.");
-            return;
+            CH.Exception.throw("Invalid colorB '" + JSON.stringify(colorB) + "'.");
         }
         var length = 0;
         switch (encoding) {
@@ -88,8 +82,7 @@
                 length = CH.CHARSET.BASE64.length;
                 break;
             default:
-                CH.Msg.error("Unknown encoding '" + encoding + "'.");
-                return;
+                CH.Exception.throw("Unknown encoding '" + encoding + "'.");
         }
         var scheme = new CH.Scheme(CH.ENCODING.HEX);
         for (var i=0; i<length; i++) {
