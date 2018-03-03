@@ -30,8 +30,7 @@
      */
     CH.Range.prototype.containsValue = function(value) {
         if (!CH.Util.isNumber(value)) {
-            CH.Msg.error("Value '" + value + "' is not a number.");
-            return false;
+            CH.Exception.throw("Value '" + value + "' is not a number.");
         }
         return value >= this.left && value < this.right;
     };
@@ -43,8 +42,7 @@
      */
     CH.Range.prototype.containsRange = function(range) {
         if (!CH.Util.isRange(range)) {
-            CH.Msg.error("Range '" + JSON.stringify(range) + "' is not a range.");
-            return false;
+            CH.Exception.throw("Range '" + JSON.stringify(range) + "' is not a range.");
         }
         return range.left >= this.left && range.right <= this.right;
     };

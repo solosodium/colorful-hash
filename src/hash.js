@@ -60,7 +60,7 @@
                 }
                 break;
             default:
-                CH.Msg.error("Unknown encoding '" + encoding + "'.");
+                CH.Exception.throw("Unknown encoding '" + encoding + "'.");
                 return [];
                 break;
         }

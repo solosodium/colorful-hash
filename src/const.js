@@ -26,35 +26,9 @@
     };
 
     /**
-     * UUID RegEx.
-     * @type {string}
-     */
-    CH.UUID_REGEX = new RegExp('^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$');
-
-    /**
-     * Message prefix string.
-     * @type {string}
-     */
-    CH.MSG_PREFIX = '[CH] ';
-
-    /**
-     * Message logging level.
-     * ---------------------------------
-     * | level |  log  | warn  | error |
-     * |-------------------------------|
-     * |   0   |   n   |   n   |   n   |
-     * |   1   |   n   |   n   |   y   |
-     * |   2   |   n   |   y   |   y   |
-     * |   3   |   y   |   y   |   y   |
-     * ---------------------------------
-     * @type {number}
-     */
-    CH.MSG_LEVEL = 3;
-
-    /**
      * Exception prefix string.
      * @type {string}
      */
-    CH.EXCEPTION_PREFIX = 'colorful-hash exception: ';
+    CH.EXCEPTION_PREFIX = 'CH Exception: ';
 
 })();
