@@ -29,6 +29,8 @@
                 intermediate = intermediate.replace(new RegExp('=', 'g'), '');
                 for (var j = 0; j < intermediate.length; j++) {
                     if (CH.CHARSET.BASE64.indexOf(intermediate.charAt(j)) < 0) {
+                        console.log(intermediate.charAt(j));
+                        console.log(CH.CHARSET.BASE64.indexOf(intermediate.charAt(j)));
                         CH.Exception.throw("'" + hash + "' is invalid BASE64 hash.");
                     }
                 }

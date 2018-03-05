@@ -34,18 +34,24 @@
      * Draw the hash with SVG element.
      */
     CH.Element.prototype.draw = function() {
+        // Clear child elements.
+        while (this.element.lastChild) {
+            this.element.removeChild(this.element.lastChild);
+        }
         // Get numbers from hash.
         var numbers = this.hash.toNumbers();
         // Draw numbers one by one.
+        var prevX = 0;
         for (var i=0; i<numbers.length; i++) {
             var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            rect.setAttribute('x', 100 / numbers.length * i + '%');
-            rect.setAttribute('y', 0);
-            // Adjust width by 2 percent to prevent artifact lines.
-            rect.setAttribute('width', (100 / numbers.length * 1.02) + '%');
+            rect.setAttribute('x', prevX + '%');
+            var nextX = 100 / numbers.length * (i + 1);
+            rect.setAttribute('y', 0 + '%');
+            rect.setAttribute('width', (nextX - prevX) * 1.05 + '%');
             rect.setAttribute('height', '100%');
             rect.setAttribute('fill', this.scheme.getColor(numbers[i]).toRGBAString());
             this.element.appendChild(rect);
+            prevX = nextX;
         }
     };
 

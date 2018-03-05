@@ -6,9 +6,7 @@
      * @constructor
      */
     CH.Scheme = function(encoding) {
-        this.defaultColor = new CH.Color(0, 0, 0);
         this.range = new CH.Range(0, 1);
-        this.maps = [];
         switch (encoding) {
             case CH.ENCODING.HEX:
                 this.range.right = CH.CHARSET.HEX.length;
@@ -20,8 +18,9 @@
                 CH.Exception.throw("Unknown encoding '" + encoding + "'.");
         }
         // Create a series of unit (1) sized maps to cover the range.
+        this.maps = [];
         for (var i=this.range.left; i<this.range.right; i++) {
-            this.maps.push(new CH.Map(new CH.Range(i, i+1), CH.Color.copy(this.defaultColor)));
+            this.maps.push(new CH.Map(new CH.Range(i, i+1), CH.Color.copy(new CH.Color(0, 0, 0))));
         }
     };
 
@@ -84,7 +83,7 @@
             default:
                 CH.Exception.throw("Unknown encoding '" + encoding + "'.");
         }
-        var scheme = new CH.Scheme(CH.ENCODING.HEX);
+        var scheme = new CH.Scheme(encoding);
         for (var i=0; i<length; i++) {
             scheme.addMap(
                 new CH.Map(new CH.Range(i, i+1),

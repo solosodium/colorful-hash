@@ -1,26 +1,61 @@
 <html>
 <head>
     <script type="application/javascript" src="../dist/colorful.hash.js"></script>
-    <style>
-        html {
-            font-family: monospace;
-        }
-    </style>
+    <style>html { font-family: monospace; }</style>
 </head>
 <body>
 <h1>Colorful Hash Demo</h1>
 <hr>
 <h2>HEX</h2>
-<h3>Color Scheme Scale: 0123456789abcdef</h3>
-<svg id="scale" width="100%" height="10px"></svg>
-<h3>Hash Code: 11ede4d3e5411bb9b2801b49693018d9</h3>
-<svg id="hash" width="100%" height="10px"></svg>
+<h3>Color Scheme Scale (0 to F):</h3>
+<svg id="hex-scale" width="100%" height="35px"></svg>
+<h3>Hash Code:</h3>
+<input id="hex-value" type="text" size="35">
+<button id="hex-set" onclick="hexSetClick()">Set</button>
+<button id="hex-random" onclick="hexRandomClick()">Random</button><br><br>
+<svg id="hex-display" width="100%" height="35px"></svg>
 <br>
 <h2>BASE64</h2>
-
+<h3>Color Scheme Scale (A to /):</h3>
+<svg id="base64-scale" width="100%" height="35px"></svg>
+<h3>Hash Code:</h3>
+<input id="base64-value" type="text" size="35">
+<button id="base64-set" onclick="base64SetClick()">Set</button>
+<button id="base64-random" onclick="base64RandomClick()">Random</button><br><br>
+<svg id="base64-display" width="100%" height="35px"></svg>
+<br>
 <script type="application/javascript">
-    CH.uuid('scale', '012-3-45678-9a-bc-def', '#ff01bb', '#0486ff');
-    CH.uuid('hash', '11ede4-d-3e5411bb9--b2801b4--9693018-d9', '#ff01bb', '#0486ff');
+    hexRandomClick();
+    base64RandomClick();
+
+    CH.hex('hex-scale', '0123456789abcdef', '#ff01bb', '#0486ff');
+    hexSetClick();
+    function hexSetClick() {
+        var value = document.getElementById('hex-value').value;
+        CH.hex('hex-display', value, '#ff01bb', '#0486ff');
+    }
+    function hexRandomClick() {
+        document.getElementById('hex-value').value = randomCode(CH.CHARSET.HEX, 20);
+    }
+
+    CH.base64('base64-scale', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprstuvwxyz0123456789+/', '#666266', '#c91020');
+    base64SetClick();
+    function base64SetClick() {
+        var value = document.getElementById('base64-value').value;
+        CH.base64('base64-display', value, '#666266', '#c91020');
+    }
+    function base64RandomClick() {
+        document.getElementById('base64-value').value = randomCode(CH.CHARSET.BASE64, 20);
+    }
+
+    function randomCode(charset, length) {
+        var result = '';
+        for (var i=0; i<length; i++) {
+            var pos = Math.floor((Math.random() * (charset.length - 1)));
+            result += charset[pos];
+        }
+        return result;
+    }
 </script>
 </body>
 </html>

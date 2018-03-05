@@ -31,7 +31,7 @@ CH.create = function(t, i, n, e, r) {
     };
     CH.CHARSET = {
         HEX: [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" ],
-        BASE64: [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", " q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "/" ]
+        BASE64: [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "/" ]
     };
     CH.EXCEPTION_PREFIX = "CH Exception: ";
 })();
@@ -94,6 +94,8 @@ CH.create = function(t, i, n, e, r) {
             n = n.replace(new RegExp("=", "g"), "");
             for (var r = 0; r < n.length; r++) {
                 if (CH.CHARSET.BASE64.indexOf(n.charAt(r)) < 0) {
+                    console.log(n.charAt(r));
+                    console.log(CH.CHARSET.BASE64.indexOf(n.charAt(r)));
                     CH.Exception.throw("'" + t + "' is invalid BASE64 hash.");
                 }
             }
@@ -232,9 +234,7 @@ CH.create = function(t, i, n, e, r) {
 
 (function() {
     CH.Scheme = function(t) {
-        this.defaultColor = new CH.Color(0, 0, 0);
         this.range = new CH.Range(0, 1);
-        this.maps = [];
         switch (t) {
           case CH.ENCODING.HEX:
             this.range.right = CH.CHARSET.HEX.length;
@@ -247,8 +247,9 @@ CH.create = function(t, i, n, e, r) {
           default:
             CH.Exception.throw("Unknown encoding '" + t + "'.");
         }
+        this.maps = [];
         for (var i = this.range.left; i < this.range.right; i++) {
-            this.maps.push(new CH.Map(new CH.Range(i, i + 1), CH.Color.copy(this.defaultColor)));
+            this.maps.push(new CH.Map(new CH.Range(i, i + 1), CH.Color.copy(new CH.Color(0, 0, 0))));
         }
     };
     CH.Scheme.prototype.addMap = function(t) {
@@ -295,7 +296,7 @@ CH.create = function(t, i, n, e, r) {
           default:
             CH.Exception.throw("Unknown encoding '" + t + "'.");
         }
-        var r = new CH.Scheme(CH.ENCODING.HEX);
+        var r = new CH.Scheme(t);
         for (var o = 0; o < e; o++) {
             r.addMap(new CH.Map(new CH.Range(o, o + 1), new CH.Color(i.r + (n.r - i.r) * o / (e - 1), i.g + (n.g - i.g) * o / (e - 1), i.b + (n.b - i.b) * o / (e - 1), i.a + (n.a - i.a) * o / (e - 1))));
         }
@@ -323,15 +324,21 @@ CH.create = function(t, i, n, e, r) {
         this.hash = n;
     };
     CH.Element.prototype.draw = function() {
+        while (this.element.lastChild) {
+            this.element.removeChild(this.element.lastChild);
+        }
         var t = this.hash.toNumbers();
-        for (var i = 0; i < t.length; i++) {
-            var n = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            n.setAttribute("x", 100 / t.length * i + "%");
-            n.setAttribute("y", 0);
-            n.setAttribute("width", 100 / t.length * 1.02 + "%");
-            n.setAttribute("height", "100%");
-            n.setAttribute("fill", this.scheme.getColor(t[i]).toRGBAString());
-            this.element.appendChild(n);
+        var i = 0;
+        for (var n = 0; n < t.length; n++) {
+            var e = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            e.setAttribute("x", i + "%");
+            var r = 100 / t.length * (n + 1);
+            e.setAttribute("y", 0 + "%");
+            e.setAttribute("width", (r - i) * 1.05 + "%");
+            e.setAttribute("height", "100%");
+            e.setAttribute("fill", this.scheme.getColor(t[n]).toRGBAString());
+            this.element.appendChild(e);
+            i = r;
         }
     };
 })();
