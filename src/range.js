@@ -10,13 +10,13 @@
         this.left = 0;
         this.right = 0;
         if (!CH.Util.isNumber(left)) {
-            CH.Exception.throw("Left bound '" + left + "' is not a number.");
+            CH.Exception.throw("Left bound '" + JSON.stringify(left) + "' is not a number.");
         }
         if (!CH.Util.isNumber(right)) {
-            CH.Exception.throw("Right bound '" + right + "' is not a number.");
+            CH.Exception.throw("Right bound '" + JSON.stringify(right) + "' is not a number.");
         }
         if (left >= right) {
-            CH.Exception.throw("Right bound '" + right + "' is not larger than left bound '" + left + "'.");
+            CH.Exception.throw("Right bound '" + JSON.stringify(right) + "' is not larger than left bound '" + JSON.stringify(left) + "'.");
         }
         // Cache values.
         this.left = left;
@@ -30,7 +30,7 @@
      */
     CH.Range.prototype.containsValue = function(value) {
         if (!CH.Util.isNumber(value)) {
-            CH.Exception.throw("Value '" + value + "' is not a number.");
+            CH.Exception.throw("Value '" + JSON.stringify(value) + "' is not a number.");
         }
         return value >= this.left && value < this.right;
     };
@@ -46,17 +46,5 @@
         }
         return range.left >= this.left && range.right <= this.right;
     };
-
-    /** Simple tests. */
-    // var range_invalid_1 = new CH.Range('a', 0);
-    // var range_invalid_2 = new CH.Range(0, 'b');
-    // var range_invalid_3 = new CH.Range(10, 2);
-    // var range_valid = new CH.Range(1.5, 6);
-    // console.log(range_valid.containsValue(''));
-    // console.log(range_valid.containsValue(2));
-    // console.log(range_valid.containsValue(-1));
-    // console.log(range_valid.containsRange({}));
-    // console.log(range_valid.containsRange(new CH.Range(2, 3)));
-    // console.log(range_valid.containsRange(new CH.Range(-1, 1)));
 
 })();

@@ -10,20 +10,20 @@
      */
     CH.Color = function(r, g, b, a) {
         if (!CH.Util.isRGBAValue(r)) {
-            CH.Exception.throw("Red '" + r + "' is not a valid color value..");
+            CH.Exception.throw("Red '" + JSON.stringify(r) + "' is not a valid color value.");
         }
         if (!CH.Util.isRGBAValue(g)) {
-            CH.Exception.throw("Green '" + g + "' is not a valid color value.");
+            CH.Exception.throw("Green '" + JSON.stringify(g) + "' is not a valid color value.");
         }
         if (!CH.Util.isRGBAValue(b)) {
-            CH.Exception.throw("Blue '" + b + "' is not a valid color value.");
+            CH.Exception.throw("Blue '" + JSON.stringify(b) + "' is not a valid color value.");
         }
         this.r = r;
         this.g = g;
         this.b = b;
         if (a) {
             if (!CH.Util.isRGBAValue(a)) {
-                CH.Exception.throw("Alpha '" + a + "' is not a valid color value.");
+                CH.Exception.throw("Alpha '" + JSON.stringify(a) + "' is not a valid color value.");
             }
             this.a = a;
         } else {
@@ -66,6 +66,9 @@
      * @param string
      */
     CH.Color.fromString = function(string) {
+        if (!CH.Util.isString(string)) {
+            CH.Exception.throw("String '" + JSON.stringify(string) + "' is not a string.");
+        }
         var m;
         // 1) '#5AF'
         m = string.match(/^#([0-9a-f]{3})$/i);
@@ -104,26 +107,7 @@
                 Math.min(Math.max(m[4], 0), 1)
             );
         }
-        CH.Exception.throw("Invalid color string '" + string + "'.");
+        CH.Exception.throw("Invalid color string '" + JSON.stringify(string) + "'.");
     };
-
-    /** Simple tests. */
-    // var color_invalid_1 = new CH.Color('r', 0, 0, 0);
-    // var color_invalid_2 = new CH.Color(0, 'g', 0, 0);
-    // var color_invalid_3 = new CH.Color(0, 0, 'b', 0);
-    // var color_invalid_4 = new CH.Color(0, 0, 0, 'a');
-    // var color_invalid_5 = new CH.Color(2, 0, 0, 0);
-    // var color_invalid_6 = new CH.Color(0, 2, 0, 0);
-    // var color_invalid_7 = new CH.Color(0, 0, 2, 0);
-    // var color_invalid_8 = new CH.Color(0, 0, 0, 2);
-    // var color_valid_1 = new CH.Color(0.5, 0.1, 0.3, 0.9);
-    // console.log(color_valid_1);
-    // var color_valid_2 = new CH.Color(0.5, 0.1, 0.3);
-    // console.log(color_valid_2);
-    // console.log(CH.Color.fromString('#3af'));
-    // console.log(CH.Color.fromString('#3aff34'));
-    // console.log(CH.Color.fromString('rgb(40, 255, 127.5)'));
-    // console.log(CH.Color.fromString('rgba(.2, 255, 127.5, .23)'));
-    // CH.Color.fromString("abcdf");
 
 })();

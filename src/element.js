@@ -10,13 +10,13 @@
     CH.Element = function(id, scheme, hash) {
         // Initialize id.
         if (!CH.Util.isString(id)) {
-            CH.Exception.throw("Element id '" + id + "' is not a string.");
+            CH.Exception.throw("Element id '" + JSON.stringify(id) + "' is not a string.");
         }
         this.id = id;
         // Initialize element with id.
         this.element = document.getElementById(id);
         if (CH.Util.isNullOrUndefined(this.element)) {
-            CH.Exception.throw("Can't find element with id '" + id + "'.");
+            CH.Exception.throw("Can't find element with id '" + JSON.stringify(id) + "'.");
         }
         // Initialize scheme.
         if (!CH.Util.isScheme(scheme)) {
@@ -47,6 +47,7 @@
             rect.setAttribute('x', prevX + '%');
             var nextX = 100 / numbers.length * (i + 1);
             rect.setAttribute('y', 0 + '%');
+            // Use 105% width to cover artifact lines.
             rect.setAttribute('width', (nextX - prevX) * 1.05 + '%');
             rect.setAttribute('height', '100%');
             rect.setAttribute('fill', this.scheme.getColor(numbers[i]).toRGBAString());
@@ -55,8 +56,21 @@
         }
     };
 
-    /** Simple tests. */
-    // var element_invalid_1 = new CH.Element(12, null, null);
-    // var element_invalid_2 = new CH.Element('test', null, null);
+    /**
+     * Set a new hash to the element.
+     * @param hash
+     */
+    CH.Element.prototype.setHash = function(hash) {
+        this.hash = new CH.Hash(hash, this.hash.encoding);
+        this.draw();
+    };
+
+    /**
+     * Set a new scheme with a list of colors.
+     * @param colors
+     */
+    CH.Element.prototype.setColors = function(colors) {
+        this.draw();
+    };
 
 })();

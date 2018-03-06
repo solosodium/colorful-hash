@@ -1,27 +1,23 @@
 /* colorful.hash.js */
 var CH = CH || {};
 
-CH.hex = function(t, i, n, e) {
-    return CH.create(t, i, n, e, CH.ENCODING.HEX);
+CH.hex = function(t, i, n) {
+    return CH.create(t, i, n, CH.ENCODING.HEX);
 };
 
-CH.base64 = function(t, i, n, e) {
-    return CH.create(t, i, n, e, CH.ENCODING.BASE64);
+CH.base64 = function(t, i, n) {
+    return CH.create(t, i, n, CH.ENCODING.BASE64);
 };
 
-CH.uuid = function(t, i, n, e) {
-    var r = i.replace(new RegExp("-", "g"), "");
-    return CH.create(t, r, n, e, CH.ENCODING.HEX);
+CH.uuid = function(t, i, n) {
+    var e = i.replace(new RegExp("-", "g"), "");
+    return CH.create(t, e, n, CH.ENCODING.HEX);
 };
 
-CH.create = function(t, i, n, e, r) {
-    var o = new CH.Hash(i, r);
-    var a = CH.Color.fromString(n);
-    var s = CH.Color.fromString(e);
-    var C = CH.Scheme.twoColorLinear(r, a, s);
-    var h = new CH.Element(t, C, o);
-    h.draw();
-    return h;
+CH.create = function(t, i, n, e) {
+    var r = new CH.Element(t, CH.Scheme.fromColors(e, n), new CH.Hash(i, e));
+    r.draw();
+    return r;
 };
 
 (function() {
@@ -72,12 +68,15 @@ CH.create = function(t, i, n, e, r) {
     CH.Util.isNullOrUndefined = function(t) {
         return t === null || typeof t === "undefined";
     };
+    CH.Util.isArray = function(t) {
+        return Array.isArray(t);
+    };
 })();
 
 (function() {
     CH.Hash = function(t, i) {
         if (!CH.Util.isString(t)) {
-            CH.Exception.throw("Hash '" + t + "' is not a string.");
+            CH.Exception.throw("Hash '" + JSON.stringify(t) + "' is not a string.");
         }
         var n = t.replace(new RegExp(" ", "g"), "");
         switch (i) {
@@ -85,7 +84,7 @@ CH.create = function(t, i, n, e, r) {
             n = n.toLowerCase();
             for (var e = 0; e < n.length; e++) {
                 if (CH.CHARSET.HEX.indexOf(n.charAt(e)) < 0) {
-                    CH.Exception.throw("'" + t + "' is invalid HEX hash.");
+                    CH.Exception.throw("'" + JSON.stringify(t) + "' is invalid HEX hash.");
                 }
             }
             break;
@@ -96,13 +95,13 @@ CH.create = function(t, i, n, e, r) {
                 if (CH.CHARSET.BASE64.indexOf(n.charAt(r)) < 0) {
                     console.log(n.charAt(r));
                     console.log(CH.CHARSET.BASE64.indexOf(n.charAt(r)));
-                    CH.Exception.throw("'" + t + "' is invalid BASE64 hash.");
+                    CH.Exception.throw("'" + JSON.stringify(t) + "' is invalid BASE64 hash.");
                 }
             }
             break;
 
           default:
-            CH.Exception.throw("Unknown encoding '" + i + "'.");
+            CH.Exception.throw("Unknown encoding '" + JSON.stringify(i) + "'.");
         }
         this.raw = t;
         this.encoding = i;
@@ -124,7 +123,7 @@ CH.create = function(t, i, n, e, r) {
             break;
 
           default:
-            CH.Exception.throw("Unknown encoding '" + encoding + "'.");
+            CH.Exception.throw("Unknown encoding '" + JSON.stringify(encoding) + "'.");
             return [];
             break;
         }
@@ -140,20 +139,20 @@ CH.create = function(t, i, n, e, r) {
         this.left = 0;
         this.right = 0;
         if (!CH.Util.isNumber(t)) {
-            CH.Exception.throw("Left bound '" + t + "' is not a number.");
+            CH.Exception.throw("Left bound '" + JSON.stringify(t) + "' is not a number.");
         }
         if (!CH.Util.isNumber(i)) {
-            CH.Exception.throw("Right bound '" + i + "' is not a number.");
+            CH.Exception.throw("Right bound '" + JSON.stringify(i) + "' is not a number.");
         }
         if (t >= i) {
-            CH.Exception.throw("Right bound '" + i + "' is not larger than left bound '" + t + "'.");
+            CH.Exception.throw("Right bound '" + JSON.stringify(i) + "' is not larger than left bound '" + JSON.stringify(t) + "'.");
         }
         this.left = t;
         this.right = i;
     };
     CH.Range.prototype.containsValue = function(t) {
         if (!CH.Util.isNumber(t)) {
-            CH.Exception.throw("Value '" + t + "' is not a number.");
+            CH.Exception.throw("Value '" + JSON.stringify(t) + "' is not a number.");
         }
         return t >= this.left && t < this.right;
     };
@@ -168,20 +167,20 @@ CH.create = function(t, i, n, e, r) {
 (function() {
     CH.Color = function(t, i, n, e) {
         if (!CH.Util.isRGBAValue(t)) {
-            CH.Exception.throw("Red '" + t + "' is not a valid color value..");
+            CH.Exception.throw("Red '" + JSON.stringify(t) + "' is not a valid color value.");
         }
         if (!CH.Util.isRGBAValue(i)) {
-            CH.Exception.throw("Green '" + i + "' is not a valid color value.");
+            CH.Exception.throw("Green '" + JSON.stringify(i) + "' is not a valid color value.");
         }
         if (!CH.Util.isRGBAValue(n)) {
-            CH.Exception.throw("Blue '" + n + "' is not a valid color value.");
+            CH.Exception.throw("Blue '" + JSON.stringify(n) + "' is not a valid color value.");
         }
         this.r = t;
         this.g = i;
         this.b = n;
         if (e) {
             if (!CH.Util.isRGBAValue(e)) {
-                CH.Exception.throw("Alpha '" + e + "' is not a valid color value.");
+                CH.Exception.throw("Alpha '" + JSON.stringify(e) + "' is not a valid color value.");
             }
             this.a = e;
         } else {
@@ -198,6 +197,9 @@ CH.create = function(t, i, n, e, r) {
         return new CH.Color(t.r, t.g, t.b, t.a);
     };
     CH.Color.fromString = function(t) {
+        if (!CH.Util.isString(t)) {
+            CH.Exception.throw("String '" + JSON.stringify(t) + "' is not a string.");
+        }
         var i;
         i = t.match(/^#([0-9a-f]{3})$/i);
         if (i && i.length > 1) {
@@ -215,7 +217,7 @@ CH.create = function(t, i, n, e, r) {
         if (i && i.length > 4) {
             return new CH.Color(Math.min(Math.max(i[1], 0), 255) / 255, Math.min(Math.max(i[2], 0), 255) / 255, Math.min(Math.max(i[3], 0), 255) / 255, Math.min(Math.max(i[4], 0), 1));
         }
-        CH.Exception.throw("Invalid color string '" + t + "'.");
+        CH.Exception.throw("Invalid color string '" + JSON.stringify(t) + "'.");
     };
 })();
 
@@ -245,7 +247,7 @@ CH.create = function(t, i, n, e, r) {
             break;
 
           default:
-            CH.Exception.throw("Unknown encoding '" + t + "'.");
+            CH.Exception.throw("Unknown encoding '" + JSON.stringify(t) + "'.");
         }
         this.maps = [];
         for (var i = this.range.left; i < this.range.right; i++) {
@@ -267,7 +269,7 @@ CH.create = function(t, i, n, e, r) {
     };
     CH.Scheme.prototype.getColor = function(t) {
         if (!CH.Util.isNumber(t)) {
-            CH.Exception.throw("Value '" + t + "' is not a number.");
+            CH.Exception.throw("Value '" + JSON.stringify(t) + "' is not a number.");
         }
         for (var i = 0; i < this.maps.length; i++) {
             if (this.maps[i].range.containsValue(t)) {
@@ -276,43 +278,57 @@ CH.create = function(t, i, n, e, r) {
         }
         CH.Exception.throw("Value '" + t + "' is not in scheme range.");
     };
-    CH.Scheme.twoColorLinear = function(t, i, n) {
-        if (!CH.Util.isColor(i)) {
-            CH.Exception.throw("Invalid colorA '" + JSON.stringify(i) + "'.");
-        }
-        if (!CH.Util.isColor(n)) {
-            CH.Exception.throw("Invalid colorB '" + JSON.stringify(n) + "'.");
-        }
-        var e = 0;
+    CH.Scheme.fromColors = function(t, i) {
+        var n = 0;
         switch (t) {
           case CH.ENCODING.HEX:
-            e = CH.CHARSET.HEX.length;
+            n = CH.CHARSET.HEX.length;
             break;
 
           case CH.ENCODING.BASE64:
-            e = CH.CHARSET.BASE64.length;
+            n = CH.CHARSET.BASE64.length;
             break;
 
           default:
-            CH.Exception.throw("Unknown encoding '" + t + "'.");
+            CH.Exception.throw("Unknown encoding '" + JSON.stringify(t) + "'.");
         }
-        var r = new CH.Scheme(t);
-        for (var o = 0; o < e; o++) {
-            r.addMap(new CH.Map(new CH.Range(o, o + 1), new CH.Color(i.r + (n.r - i.r) * o / (e - 1), i.g + (n.g - i.g) * o / (e - 1), i.b + (n.b - i.b) * o / (e - 1), i.a + (n.a - i.a) * o / (e - 1))));
+        if (!CH.Util.isArray(i)) {
+            CH.Exception.throw("Colors '" + JSON.stringify(i) + "' is not an array.");
         }
-        return r;
+        if (i.length < 2) {
+            CH.Exception.throw("Length of colors '" + i.length + "' is less than 2.");
+        }
+        if (i.length > n) {
+            i.splice(n, i.length - n);
+        }
+        var e = [];
+        for (var r = 0; r < i.length; r++) {
+            e.push(CH.Color.fromString(i[r]));
+        }
+        var o = e.length;
+        var s = new CH.Scheme(t);
+        var a = 0;
+        for (var h = 0; h < n; h++) {
+            if (h > (a + 1) / (o - 1) * (n - 1)) {
+                a++;
+            }
+            var C = a / (o - 1) * (n - 1);
+            var H = (a + 1) / (o - 1) * (n - 1);
+            s.addMap(new CH.Map(new CH.Range(h, h + 1), new CH.Color(e[a].r + (e[a + 1].r - e[a].r) * (h - C) / (H - C), e[a].g + (e[a + 1].g - e[a].g) * (h - C) / (H - C), e[a].b + (e[a + 1].b - e[a].b) * (h - C) / (H - C), e[a].a + (e[a + 1].a - e[a].a) * (h - C) / (H - C))));
+        }
+        return s;
     };
 })();
 
 (function() {
     CH.Element = function(t, i, n) {
         if (!CH.Util.isString(t)) {
-            CH.Exception.throw("Element id '" + t + "' is not a string.");
+            CH.Exception.throw("Element id '" + JSON.stringify(t) + "' is not a string.");
         }
         this.id = t;
         this.element = document.getElementById(t);
         if (CH.Util.isNullOrUndefined(this.element)) {
-            CH.Exception.throw("Can't find element with id '" + t + "'.");
+            CH.Exception.throw("Can't find element with id '" + JSON.stringify(t) + "'.");
         }
         if (!CH.Util.isScheme(i)) {
             CH.Exception.throw("Invalid scheme '" + JSON.stringify(i) + "'.");
@@ -340,5 +356,12 @@ CH.create = function(t, i, n, e, r) {
             this.element.appendChild(e);
             i = r;
         }
+    };
+    CH.Element.prototype.setHash = function(t) {
+        this.hash = new CH.Hash(t, this.hash.encoding);
+        this.draw();
+    };
+    CH.Element.prototype.setColors = function(t) {
+        this.draw();
     };
 })();

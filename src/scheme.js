@@ -15,7 +15,7 @@
                 this.range.right = CH.CHARSET.BASE64.length;
                 break;
             default:
-                CH.Exception.throw("Unknown encoding '" + encoding + "'.");
+                CH.Exception.throw("Unknown encoding '" + JSON.stringify(encoding) + "'.");
         }
         // Create a series of unit (1) sized maps to cover the range.
         this.maps = [];
@@ -49,7 +49,7 @@
      */
     CH.Scheme.prototype.getColor = function(value) {
         if (!CH.Util.isNumber(value)) {
-            CH.Exception.throw("Value '" + value + "' is not a number.");
+            CH.Exception.throw("Value '" + JSON.stringify(value) + "' is not a number.");
         }
         for (var i=0; i<this.maps.length; i++) {
             if (this.maps[i].range.containsValue(value)) {
@@ -60,60 +60,58 @@
     };
 
     /**
-     * Create a color scheme based on two colors (linearly interpreted).
+     * Create a scheme with a list of colors.
      * @param encoding
-     * @param colorA
-     * @param colorB
+     * @param colors
+     * @return {CH.Scheme}
      */
-    CH.Scheme.twoColorLinear = function(encoding, colorA, colorB) {
-        if (!CH.Util.isColor(colorA)) {
-            CH.Exception.throw("Invalid colorA '" + JSON.stringify(colorA) + "'.");
-        }
-        if (!CH.Util.isColor(colorB)) {
-            CH.Exception.throw("Invalid colorB '" + JSON.stringify(colorB) + "'.");
-        }
-        var length = 0;
+    CH.Scheme.fromColors = function(encoding, colors) {
+        var eLength = 0;
         switch (encoding) {
             case CH.ENCODING.HEX:
-                length = CH.CHARSET.HEX.length;
+                eLength = CH.CHARSET.HEX.length;
                 break;
             case CH.ENCODING.BASE64:
-                length = CH.CHARSET.BASE64.length;
+                eLength = CH.CHARSET.BASE64.length;
                 break;
             default:
-                CH.Exception.throw("Unknown encoding '" + encoding + "'.");
+                CH.Exception.throw("Unknown encoding '" + JSON.stringify(encoding) + "'.");
         }
+        if (!CH.Util.isArray(colors)) {
+            CH.Exception.throw("Colors '" + JSON.stringify(colors) + "' is not an array.");
+        }
+        if (colors.length < 2) {
+            CH.Exception.throw("Length of colors '" + colors.length + "' is less than 2.");
+        }
+        if (colors.length > eLength) {
+            colors.splice(eLength, colors.length - eLength);
+        }
+        var cs = [];
+        for (var k=0; k<colors.length; k++) {
+            cs.push(CH.Color.fromString(colors[k]));
+        }
+        var cLength = cs.length;
         var scheme = new CH.Scheme(encoding);
-        for (var i=0; i<length; i++) {
+        var j = 0;
+        for (var i=0; i<eLength; i++) {
+            if (i > (j + 1) / (cLength - 1)  * (eLength - 1)) {
+                j++;
+            }
+            // Interpolate between two colors.
+            var a = j / (cLength - 1) * (eLength - 1);
+            var b = (j + 1) / (cLength - 1) * (eLength - 1);
             scheme.addMap(
                 new CH.Map(new CH.Range(i, i+1),
                     new CH.Color(
-                        colorA.r + (colorB.r - colorA.r) * i / (length - 1),
-                        colorA.g + (colorB.g - colorA.g) * i / (length - 1),
-                        colorA.b + (colorB.b - colorA.b) * i / (length - 1),
-                        colorA.a + (colorB.a - colorA.a) * i / (length - 1)
+                        cs[j].r + (cs[j+1].r - cs[j].r) * (i - a) / (b - a),
+                        cs[j].g + (cs[j+1].g - cs[j].g) * (i - a) / (b - a),
+                        cs[j].b + (cs[j+1].b - cs[j].b) * (i - a) / (b - a),
+                        cs[j].a + (cs[j+1].a - cs[j].a) * (i - a) / (b - a)
                     )
                 )
             );
         }
         return scheme;
     };
-
-    /** Simple tests. */
-    // var scheme_invalid_1 = new CH.Scheme('what');
-    // scheme_invalid_1.addMap('what');
-    // var scheme_valid_1 = new CH.Scheme(CH.ENCODING.HEX);
-    // scheme_valid_1.addMap(new CH.Map(new CH.Range(-1, 5), new CH.Color(0.5, 0.5, 0.5)));
-    // scheme_valid_1.addMap(new CH.Map(new CH.Range(5, 20), new CH.Color(0.5, 0.5, 0.5)));
-    // console.log(scheme_valid_1);
-    // var scheme_valid_2 = new CH.Scheme(CH.ENCODING.HEX);
-    // scheme_valid_2.addMap(new CH.Map(new CH.Range(4, 7), new CH.Color(1, 0, 0)));
-    // scheme_valid_2.addMap(new CH.Map(new CH.Range(0, 3), new CH.Color(0, 1, 0)));
-    // scheme_valid_2.addMap(new CH.Map(new CH.Range(6, 9), new CH.Color(0, 0, 1)));
-    // console.log(JSON.stringify(scheme_valid_2.maps));
-    // console.log(scheme_valid_2.getColor(8));
-    // var scheme_valid_3 = CH.Scheme.twoColorLinear(
-    //     CH.ENCODING.HEX, new CH.Color(0.5, 0.2, 0.1), new CH.Color(0.6, 1.0, 0.3));
-    // console.log(scheme_valid_3);
 
 })();

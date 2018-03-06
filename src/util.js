@@ -89,4 +89,13 @@
         return (value === null) || (typeof value === 'undefined');
     };
 
+    /**
+     * Check if value is an array.
+     * @param array
+     * @return {boolean}
+     */
+    CH.Util.isArray = function(array) {
+        return Array.isArray(array);
+    };
+
 })();

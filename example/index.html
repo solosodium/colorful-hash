@@ -25,14 +25,17 @@
 <svg id="base64-display" width="100%" height="35px"></svg>
 <br>
 <script type="application/javascript">
+    // Define color schemes.
+    var hexScheme = ['#FF595E', '#FFCA3A', '#8AC926', '#1982C4', '#6A4C93'];
+    var base64Scheme = ['#FF595E', '#FFCA3A', '#8AC926', '#1982C4', '#6A4C93'];
     // HEX initialization.
-    CH.hex('hex-scale', '0123456789abcdef', '#ff01bb', '#0486ff');
+    CH.hex('hex-scale', '0123456789abcdef', hexScheme);
     hexRandomClick();
     hexSetClick();
     // BASE64 initialization.
     base64RandomClick();
     base64SetClick();
-    CH.base64('base64-scale', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprstuvwxyz0123456789+/', '#666266', '#c91020');
+    CH.base64('base64-scale', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprstuvwxyz0123456789+/', base64Scheme);
     // Utility functions.
     function randomCode(charset, length) {
         var result = '';
@@ -42,20 +45,20 @@
         return result;
     }
     // HEX functions.
-    function base64SetClick() {
-        var value = document.getElementById('base64-value').value;
-        CH.base64('base64-display', value, '#666266', '#c91020');
-    }
-    function base64RandomClick() {
-        document.getElementById('base64-value').value = randomCode(CH.CHARSET.BASE64, 20);
-    }
-    // BASE64 functions.
     function hexSetClick() {
         var value = document.getElementById('hex-value').value;
-        CH.hex('hex-display', value, '#ff01bb', '#0486ff');
+        CH.hex('hex-display', value, hexScheme);
     }
     function hexRandomClick() {
         document.getElementById('hex-value').value = randomCode(CH.CHARSET.HEX, 20);
+    }
+    // BASE64 functions.
+    function base64SetClick() {
+        var value = document.getElementById('base64-value').value;
+        CH.base64('base64-display', value, base64Scheme);
+    }
+    function base64RandomClick() {
+        document.getElementById('base64-value').value = randomCode(CH.CHARSET.BASE64, 20);
     }
 </script>
 </body>

@@ -16,7 +16,4 @@
         throw CH.EXCEPTION_PREFIX + msg;
     };
 
-    /** Simple tests. */
-    // CH.Exception.throw("Just some error.");
-
 })();
