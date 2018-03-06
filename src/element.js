@@ -70,6 +70,7 @@
      * @param colors
      */
     CH.Element.prototype.setColors = function(colors) {
+        this.scheme = CH.Scheme.fromColors(this.scheme.encoding, colors);
         this.draw();
     };
 

@@ -17,6 +17,7 @@
             default:
                 CH.Exception.throw("Unknown encoding '" + JSON.stringify(encoding) + "'.");
         }
+        this.encoding = encoding;
         // Create a series of unit (1) sized maps to cover the range.
         this.maps = [];
         for (var i=this.range.left; i<this.range.right; i++) {

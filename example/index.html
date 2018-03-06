@@ -25,17 +25,40 @@
 <svg id="base64-display" width="100%" height="35px"></svg>
 <br>
 <script type="application/javascript">
+    // Define ascending hex and base64 strings.
+    var hexScale = '0123456789abcdef';
+    var base64Scale = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprstuvwxyz0123456789+/';
     // Define color schemes.
     var hexScheme = ['#FF595E', '#FFCA3A', '#8AC926', '#1982C4', '#6A4C93'];
     var base64Scheme = ['#FF595E', '#FFCA3A', '#8AC926', '#1982C4', '#6A4C93'];
-    // HEX initialization.
-    CH.hex('hex-scale', '0123456789abcdef', hexScheme);
+    // Initialize scales elements.
+    CH.hex('hex-scale', hexScale, hexScheme);
+    CH.base64('base64-scale', base64Scale, base64Scheme);
+    // Initialize display elements.
+    var hexElement = CH.hex('hex-display', '', hexScheme);
+    var base64Element = CH.base64('base64-display', '', base64Scheme);
+    // Generate random hash values.
     hexRandomClick();
-    hexSetClick();
-    // BASE64 initialization.
     base64RandomClick();
+    // Set hash values to their elements;
+    hexSetClick();
     base64SetClick();
-    CH.base64('base64-scale', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnoprstuvwxyz0123456789+/', base64Scheme);
+    // HEX button functions.
+    function hexSetClick() {
+        var value = document.getElementById('hex-value').value;
+        hexElement.setHash(value);
+    }
+    function hexRandomClick() {
+        document.getElementById('hex-value').value = randomCode(CH.CHARSET.HEX, 20);
+    }
+    // BASE64 button functions.
+    function base64SetClick() {
+        var value = document.getElementById('base64-value').value;
+        base64Element.setHash(value);
+    }
+    function base64RandomClick() {
+        document.getElementById('base64-value').value = randomCode(CH.CHARSET.BASE64, 20);
+    }
     // Utility functions.
     function randomCode(charset, length) {
         var result = '';
@@ -43,22 +66,6 @@
             result += charset[Math.floor((Math.random() * (charset.length - 1)))];
         }
         return result;
-    }
-    // HEX functions.
-    function hexSetClick() {
-        var value = document.getElementById('hex-value').value;
-        CH.hex('hex-display', value, hexScheme);
-    }
-    function hexRandomClick() {
-        document.getElementById('hex-value').value = randomCode(CH.CHARSET.HEX, 20);
-    }
-    // BASE64 functions.
-    function base64SetClick() {
-        var value = document.getElementById('base64-value').value;
-        CH.base64('base64-display', value, base64Scheme);
-    }
-    function base64RandomClick() {
-        document.getElementById('base64-value').value = randomCode(CH.CHARSET.BASE64, 20);
     }
 </script>
 </body>
