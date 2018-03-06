@@ -11,6 +11,7 @@ A JavaScript library that transforms hex or base64 hash to colorful SVG.
 * Minified version: [colorful.hash.min.js](/dist/colorful.hash.min.js)
 
 ### Include in HTML
+
 ```html
 <body>
 <head>...
@@ -19,7 +20,9 @@ A JavaScript library that transforms hex or base64 hash to colorful SVG.
 <body>...</body>
 </body>
 ```
+
 ### Define a SVG
+
 ```html
 <body>
 <head>...</head>
@@ -29,6 +32,7 @@ A JavaScript library that transforms hex or base64 hash to colorful SVG.
 </body>
 ```
 ### Write some code
+
 To create an hex hash:
 
 ```javascript
@@ -42,6 +46,22 @@ var element = CH.base64('svg-id', '+A1uDe4', ['#000000', '#ffffff']);
 ```
 
 > You can pass in an array of colors as a color scheme. Currently color supports hex string (e.g. ```'#002244'```), rgb string (e.g. ```'rgb(0, 127, 255)'```) and rgba string (e.g. ```'rgba(0, 127, 255, 0.5)'```).
+
+### Additional APIs
+
+To update the hash of exsiting element:
+
+```javascript
+element.setHash('5e1b27a');
+```
+
+To update the color scheme of existing element:
+
+```javascript
+element.setColors(['#ff0000', '#00ff00', '#0000ff']);
+```
+
+> Both APIs will trigger SVG element to redraw.
 
 ## Example
 
