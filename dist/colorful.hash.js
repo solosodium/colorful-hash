@@ -249,6 +249,7 @@ CH.create = function(t, i, n, e) {
           default:
             CH.Exception.throw("Unknown encoding '" + JSON.stringify(t) + "'.");
         }
+        this.encoding = t;
         this.maps = [];
         for (var i = this.range.left; i < this.range.right; i++) {
             this.maps.push(new CH.Map(new CH.Range(i, i + 1), CH.Color.copy(new CH.Color(0, 0, 0))));
@@ -313,8 +314,8 @@ CH.create = function(t, i, n, e) {
                 a++;
             }
             var C = a / (o - 1) * (n - 1);
-            var H = (a + 1) / (o - 1) * (n - 1);
-            s.addMap(new CH.Map(new CH.Range(h, h + 1), new CH.Color(e[a].r + (e[a + 1].r - e[a].r) * (h - C) / (H - C), e[a].g + (e[a + 1].g - e[a].g) * (h - C) / (H - C), e[a].b + (e[a + 1].b - e[a].b) * (h - C) / (H - C), e[a].a + (e[a + 1].a - e[a].a) * (h - C) / (H - C))));
+            var c = (a + 1) / (o - 1) * (n - 1);
+            s.addMap(new CH.Map(new CH.Range(h, h + 1), new CH.Color(e[a].r + (e[a + 1].r - e[a].r) * (h - C) / (c - C), e[a].g + (e[a + 1].g - e[a].g) * (h - C) / (c - C), e[a].b + (e[a + 1].b - e[a].b) * (h - C) / (c - C), e[a].a + (e[a + 1].a - e[a].a) * (h - C) / (c - C))));
         }
         return s;
     };
@@ -362,6 +363,7 @@ CH.create = function(t, i, n, e) {
         this.draw();
     };
     CH.Element.prototype.setColors = function(t) {
+        this.scheme = CH.Scheme.fromColors(this.scheme.encoding, t);
         this.draw();
     };
 })();

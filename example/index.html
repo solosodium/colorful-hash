@@ -10,7 +10,7 @@
 <h3>Color Scheme Scale (0 to F):</h3>
 <svg id="hex-scale" width="100%" height="35px"></svg>
 <h3>Hash Code:</h3>
-<input id="hex-value" type="text" size="35">
+<input id="hex-value" type="text" size="120">
 <button id="hex-set" onclick="hexSetClick()">Set</button>
 <button id="hex-random" onclick="hexRandomClick()">Random</button><br><br>
 <svg id="hex-display" width="100%" height="35px"></svg>
@@ -19,7 +19,7 @@
 <h3>Color Scheme Scale (A to /):</h3>
 <svg id="base64-scale" width="100%" height="35px"></svg>
 <h3>Hash Code:</h3>
-<input id="base64-value" type="text" size="35">
+<input id="base64-value" type="text" size="120">
 <button id="base64-set" onclick="base64SetClick()">Set</button>
 <button id="base64-random" onclick="base64RandomClick()">Random</button><br><br>
 <svg id="base64-display" width="100%" height="35px"></svg>
@@ -49,7 +49,7 @@
         hexElement.setHash(value);
     }
     function hexRandomClick() {
-        document.getElementById('hex-value').value = randomCode(CH.CHARSET.HEX, 20);
+        document.getElementById('hex-value').value = randomCode(CH.CHARSET.HEX, 30);
     }
     // BASE64 button functions.
     function base64SetClick() {
@@ -57,7 +57,7 @@
         base64Element.setHash(value);
     }
     function base64RandomClick() {
-        document.getElementById('base64-value').value = randomCode(CH.CHARSET.BASE64, 20);
+        document.getElementById('base64-value').value = randomCode(CH.CHARSET.BASE64, 100);
     }
     // Utility functions.
     function randomCode(charset, length) {
