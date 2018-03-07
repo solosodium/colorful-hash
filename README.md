@@ -2,6 +2,8 @@
 
 A JavaScript library that transforms hex or base64 hash to colorful SVG.
 
+![Example](example.png)
+
 ## Getting Started
 
 ### Download the JavaScript file
