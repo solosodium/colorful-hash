@@ -5,20 +5,20 @@ CH.hex = function(t, i, n) {
     return CH.create(t, i, n, CH.ENCODING.HEX);
 };
 
-CH.base64 = function(t, i, n) {
-    return CH.create(t, i, n, CH.ENCODING.BASE64);
-};
-
-CH.uuid = function(t, i, n) {
-    var e = i.replace(new RegExp("-", "g"), "");
-    return CH.create(t, e, n, CH.ENCODING.HEX);
-};
-
-CH.create = function(t, i, n, e) {
-    var r = new CH.Element(t, CH.Scheme.fromColors(e, n), new CH.Hash(i, e));
-    r.draw();
-    return r;
-};
+(function() {
+    CH.base64 = function(t, i, n) {
+        return CH.create(t, i, n, CH.ENCODING.BASE64);
+    };
+    CH.uuid = function(t, i, n) {
+        var e = i.replace(new RegExp("-", "g"), "");
+        return CH.create(t, e, n, CH.ENCODING.HEX);
+    };
+    CH.create = function(t, i, n, e) {
+        var r = new CH.Element(t, CH.Scheme.fromColors(e, n), new CH.Hash(i, e));
+        r.draw();
+        return r;
+    };
+})();
 
 (function() {
     CH.ENCODING = {

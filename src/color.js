@@ -45,7 +45,6 @@
     };
 
     /**
-     * /**
      * Copy constructor of color.
      * @param color
      * @return {CH.Color}
