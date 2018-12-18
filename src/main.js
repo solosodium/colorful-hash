@@ -3,18 +3,18 @@
  */
 var CH = CH || {};
 
-/**
- * Public interface to create a HEX encoding hash.
- * @param id SVG element id
- * @param hash hash code in string
- * @param colors a list of colors
- */
-CH.hex = function(id, hash, colors) {
-    return CH.create(id, hash, colors, CH.ENCODING.HEX);
-};
-
 (function() {
 
+    /**
+     * Public interface to create a HEX encoding hash.
+     * @param id SVG element id
+     * @param hash hash code in string
+     * @param colors a list of colors
+     */
+    CH.hex = function(id, hash, colors) {
+        return CH.create(id, hash, colors, CH.ENCODING.HEX);
+    };
+    
     /**
      * Public interface to create a BASE64 encoding hash.
      * @param id SVG element id
