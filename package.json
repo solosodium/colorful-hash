@@ -1,7 +1,7 @@
 {
   "name": "colorful-hash",
   "version": "0.0.1",
-  "description": "A sample Node.js app using Express 4",
+  "description": "colorful-hash builder",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
